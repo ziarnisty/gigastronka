@@ -1,0 +1,164 @@
+@font-face 
+{
+    font-family: "naglowek";
+    src: url('fonts/Cocogoose-Pro-Semilight-trial.ttf');
+    font-weight: normal;
+    font-style: italic;
+}
+
+body {
+    background-color: #0f172a; /* Ciemne, nowoczesne tło */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.bajer {
+    background: #0e326c;
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    text-shadow: #0f172a;
+    font-family: 'naglowek';
+    color: rgb(255, 255, 255);
+    box-shadow: 0 0px 30px rgba(0,0,0,0.5);
+    width: 200px;
+    
+    /* BAJER: Płynność przejścia */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: default;
+    
+}
+
+p {
+    text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+}
+
+h1 {
+    text-shadow: 4px 4px 0px rgba(83, 83, 83, 0.5);
+}
+
+/* BAJER: Efekt po najechaniu myszką na całą kartę */
+.bajer:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 0px 40px rgba(56, 189, 248, 0.2);
+    
+}
+
+.bajer h1 { /* rozjeżdżanie napisu */
+    transition: letter-spacing 0.5s ease, font-weight 0.5s ease;
+    white-space: nowrap;
+    text-align: center;
+    white-space: nowrap
+}
+
+.bajer:hover h1 {
+    /* To rozsunie wszystkie litery od siebie równomiernie */
+    letter-spacing: 2px; 
+    
+    /* Dodatkowo możemy je odchudzić, co wygląda bardzo pro */
+    
+}
+
+button {
+    scale: 1.2;
+    background: #38bdf8;
+    border: none;
+    box-shadow: 0 3px 0px rgba(56, 189, 248, 0.2);
+    padding: 10px 20px;
+    border-radius: 30px;
+    color: #0f172a;
+    font-weight: bold;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+button:hover {
+    background: #f0abfc; /* Zmienia kolor na różowy przy najechaniu */
+    letter-spacing: 3px; /* Rozsuwa litery */
+}
+
+.bajer {
+    display: flex;
+    flex-direction: column; /* Układa przycisk i tekst jeden pod drugim */
+    align-items: center;    /* Środkuje oba elementy */
+    margin-top: 20px;       /* Odstęp od napisu powyżej */
+}
+
+.sub-text {
+    font-size: 12px;        /* Bardzo mały rozmiar czcionki */
+    color: #ffffff;        /* Subtelny, szary kolor */
+    margin-top: 12px;        /* Odstęp od przycisku */
+    letter-spacing: 1px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-family: 'Montserrat', sans-serif;
+
+}
+
+.bajer:hover .sub-text {
+    opacity: 1;
+}
+
+
+.stopka {
+    position: fixed;   /* Stopka będzie zawsze na dole ekranu */
+    bottom: 0px;
+    left: 0;
+    width: 100%;
+    padding: 10px 0;
+    background: rgba(15, 23, 42, 0.8); /* Półprzezroczyste tło */
+    backdrop-filter: blur(10px);      /* Rozmycie tła pod stopką - mega efekt! */
+    text-align: center;
+    color: #64748b;    /* Szary, dyskretny kolor */
+    font-size: 14px;
+    border-top: 2px solid #334155;
+}
+
+.sociale a {
+    color: #38bdf8;
+    text-decoration: none;
+    margin: 0 10px;
+    transition: 0.3s;
+}
+
+.sociale a:hover {
+    color: #f0abfc;
+    text-shadow: 0 0 10px #f0abfc;
+}
+
+
+/* tlo */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0f172a; /* Kolor zapasowy */
+    overflow: hidden; /* Żeby nic nie wystawało */
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* TU WPISZ NAZWĘ SWOJEGO PLIKU */
+    background-image: url('tlo.jpg'); 
+    background-size: cover;
+    background-position: center;
+    
+    /* TO ODPOWIADA ZA ROZMAZANIE */
+    filter: blur(8px) brightness(0.5); 
+    
+    z-index: -1; /* Tło musi być pod spodem */
+    transform: scale(1.1); /* Lekkie powiększenie, żeby nie było widać białych krawędzi od rozmazania */
+}

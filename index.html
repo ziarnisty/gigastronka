@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nieźle co?</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+</head>
+
+<body>
+    <div class="bajer"> 
+        <h1>Ty tutaj?</h1>
+        <p>Szampańska zabawa!</p> 
+        <button onclick="window.open('https://ptoszek.pl', '_blank')">
+            Kliknij mnie
+        </button>
+        
+        
+        <span class="sub-text">!Uwaga!</span>
+    </div>
+
+
+    <footer class="stopka">
+    <p>&copy; 2026 Karol Moskalewicz | Zrobione ze szpont AI</p>
+    <div class="sociale">
+    <a href="javascript:void(0)" onclick="copyToClipboard('moskalewiczkarol@gmail.com')">moskalewiczkarol@gmail.com</a>
+</div>
+</footer>
+
+<script>
+function copyToClipboard(text) {
+    const el = event.target; // Łapiemy kliknięty link
+    const originalText = el.innerText; // Zapamiętujemy np. "Instagram"
+
+    navigator.clipboard.writeText(text).then(() => {
+        el.innerText = "Skopiowano!"; // Zmieniamy napis
+        el.style.color = "#f0abfc";   // Zmieniamy kolor na różowy
+        
+        setTimeout(() => {
+            el.innerText = originalText; // Po 2 sekundach wraca do normy
+            el.style.color = ""; 
+        }, 2000);
+    });
+}
+</script>
+
+
+</body>
+</html>
