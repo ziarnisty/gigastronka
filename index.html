@@ -10,9 +10,28 @@
 </head>
 
 <body>
+
+<nav class="navbar-glow">
+    <div class="nav-content">
+        
+        <ul class="nav-links" id="nav-menu">
+            <li><a href="#home" class="active">Główna</a></li>
+            <li><a href="#projects">Projekty</a></li>
+            <li><a href="#contact">Kontakt</a></li>
+        </ul>
+
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+</nav>
+
+
+
+
     <div class="bajer"> 
         <h1>Ty tutaj?</h1>
-        <p>Szampańska zabawa!</p> 
+        <p3>Szampańska zabawa!</p3> 
         <button onclick="window.open('https://ptoszek.pl', '_blank')">
             Kliknij mnie
         </button>
@@ -45,6 +64,51 @@ function copyToClipboard(text) {
     });
 }
 </script>
+
+<script>
+// Pobieramy wszystkie linki z menu
+const links = document.querySelectorAll('.nav-links a');
+
+links.forEach(link => {
+    link.addEventListener('click', function() {
+        // 1. Usuwamy klasę 'active' ze wszystkich linków
+        links.forEach(l => l.classList.remove('active'));
+        
+        // 2. Dodajemy klasę 'active' do tego, który właśnie kliknęliśmy
+        this.classList.add('active');
+    });
+});
+</script>
+
+
+
+
+
+<script>
+const navbar = document.querySelector('.navbar-glow');
+
+navbar.addEventListener('mousemove', (e) => {
+    const rect = navbar.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Łączymy dwa gradienty: 
+    // 1. Ruchome światełko (radial-gradient)
+    // 2. Stałe tło liniowe (linear-gradient)
+    navbar.style.backgroundImage = `
+        radial-gradient(circle at ${x}px ${y}px, rgba(255, 255, 255, 0.05), transparent 120px),
+        linear-gradient(90deg, rgba(0, 22, 72, 0.55), rgba(0, 45, 84, 0.55))
+    `;
+});
+
+navbar.addEventListener('mouseleave', () => {
+    // Przywracamy tylko stały gradient liniowy, gdy myszka ucieknie
+    navbar.style.backgroundImage = `linear-gradient(90deg, rgba(0, 22, 72, 0.55), rgba(0, 45, 84, 0.55))`;
+});
+    </script>
+
+
+
 
 
 </body>
