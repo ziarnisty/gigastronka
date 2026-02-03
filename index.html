@@ -24,7 +24,43 @@
             <span></span><span></span><span></span>
         </div>
     </div>
+    
+    
+
 </nav>
+
+<div class="main-container">
+    <div class="bajer pin-game"> 
+        <h1>Zgadnij Liczbę</h1>
+        <div class="pin-inputs">
+            <input type="text" maxlength="1" class="pin-digit" id="d1">
+            <input type="text" maxlength="1" class="pin-digit" id="d2">
+            <input type="text" maxlength="1" class="pin-digit" id="d3">
+            <input type="text" maxlength="1" class="pin-digit" id="d4">
+        </div>
+        <button onclick="checkPin()">Sprawdź</button>
+        <p id="pin-hint" class="podpowiedz" style="opacity: 1; margin-top: 15px;">Wpisz 4 cyfry!</p>
+        <p5 class="proby">Próby: <span id="attempt-count">0</span></p5>
+
+<div class="pin-legend">
+    <div class="legend-item">
+        <span class="box-sample correct"></span>
+        <span class="legend-text">Trafiona</span>
+    </div>
+    <div class="legend-item">
+        <span class="box-sample present"></span>
+        <span class="legend-text">Liczba występuje</span>
+    </div>
+    <div class="legend-item">
+        <span class="box-sample wrong"></span>
+        <span class="legend-text">Brak liczby</span>
+    </div>
+</div>
+
+
+    </div>
+</div>
+
 
 
 
@@ -39,6 +75,13 @@
         
         <span class="sub-text">!Uwaga!</span>
     </div>
+</div>
+
+
+
+
+
+
 
 
     <footer class="stopka">
@@ -47,6 +90,44 @@
     <a href="javascript:void(0)" onclick="copyToClipboard('moskalewiczkarol@gmail.com')">moskalewiczkarol@gmail.com</a>
 </div>
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+<script>
+
+function fireConfetti() {
+    confetti({
+        particleCount: 100, // Ilość "konfetti"
+        spread: 70,         // Rozrzut
+        origin: { y: 0.6 } // Skąd mają wylatywać (trochę wyżej niż środek)
+    });
+
+    // Możesz dodać drugi, mniejszy "wybuch" po chwili
+    setTimeout(() => {
+        confetti({
+            particleCount: 50,
+            spread: 50,
+            origin: { y: 0.8, x: 0.2 }, // Z innej pozycji
+            colors: ['#007bff', '#28a745', '#dc3545', '#ffc107'] // Kolory konfetti
+        });
+    }, 250); // Po 0.25 sekundy
+
+    setTimeout(() => {
+        confetti({
+            particleCount: 50,
+            spread: 50,
+            origin: { y: 0.8, x: 0.8 }, // Z innej pozycji
+            colors: ['#007bff', '#28a745', '#dc3545', '#ffc107'] // Kolory konfetti
+        });
+    }, 350); // Po 0.35 sekundy
+}
+
+
+</script>
+
+
+
+
 
 <script>
 function copyToClipboard(text) {
@@ -106,6 +187,144 @@ navbar.addEventListener('mouseleave', () => {
     navbar.style.backgroundImage = `linear-gradient(90deg, rgba(0, 22, 72, 0.55), rgba(0, 45, 84, 0.55))`;
 });
     </script>
+
+<script>
+
+const secretPin = "4207"; 
+const pinInputs = document.querySelectorAll('.pin-digit');
+let attempts = 0; // Licznik prób
+
+// 1. Funkcje przeskakiwania
+function focusNext(currentIndex) {
+    let next = (currentIndex + 1) % pinInputs.length;
+    let start = next;
+    while (pinInputs[next].disabled) {
+        next = (next + 1) % pinInputs.length;
+        if (next === start) return;
+    }
+    pinInputs[next].focus();
+}
+
+function focusPrev(currentIndex) {
+    let prev = (currentIndex - 1 + pinInputs.length) % pinInputs.length;
+    let start = prev;
+    while (pinInputs[prev].disabled) {
+        prev = (prev - 1 + pinInputs.length) % pinInputs.length;
+        if (prev === start) return;
+    }
+    pinInputs[prev].focus();
+}
+
+// 2. Główna logika sprawdzania PIN
+function checkPin() {
+    let guess = Array.from(pinInputs).map(i => i.value);
+    let secret = secretPin.split('');
+    let hintElement = document.getElementById('pin-hint');
+    let attemptElement = document.getElementById('attempt-count');
+    
+    if (guess.join('').length < 4) {
+        hintElement.innerText = "Wpisz 4 cyfry!";
+        return;
+    }
+
+    // ZWIĘKSZAMY LICZNIK PRÓB
+    attempts++;
+    attemptElement.innerText = attempts;
+
+    let result = Array(4).fill(null); 
+    let secretUsed = Array(4).fill(false);
+    let guessUsed = Array(4).fill(false);
+
+    // Zielone
+    guess.forEach((digit, i) => {
+        if (digit === secret[i]) {
+            result[i] = 'correct';
+            secretUsed[i] = true;
+            guessUsed[i] = true;
+        }
+    });
+
+    // Żółte
+    guess.forEach((digit, i) => {
+        if (!guessUsed[i]) {
+            let foundIndex = secret.findIndex((sDigit, sIdx) => 
+                sDigit === digit && !secretUsed[sIdx]
+            );
+            if (foundIndex !== -1) {
+                result[i] = 'present';
+                secretUsed[foundIndex] = true;
+                guessUsed[i] = true;
+            } else {
+                result[i] = 'wrong';
+            }
+        }
+    });
+
+    // Aplikacja kolorów
+    pinInputs.forEach((input, i) => {
+        if (!input.disabled) {
+            input.classList.remove('correct', 'present', 'wrong');
+            if (result[i] === 'correct') {
+                input.classList.add('correct');
+                input.disabled = true;
+                input.style.cursor = "not-allowed";
+            } else if (result[i] === 'present') {
+                input.classList.add('present');
+            } else if (result[i] === 'wrong') {
+                input.classList.add('wrong');
+            }
+        }
+    });
+
+    const firstFree = Array.from(pinInputs).find(input => !input.disabled);
+    if (firstFree) firstFree.focus();
+
+    const guessNum = parseInt(guess.join(''));
+    const secretNum = parseInt(secretPin);
+    if (guessNum < secretNum) {
+        hintElement.innerText = "Za mało! ↑";
+    } else if (guessNum > secretNum) {
+        hintElement.innerText = "Za dużo! ↓";
+    } else {
+    hintElement.innerText = `BRAWO! Odgadnięto w ${attempts} próbie! 🎉`;
+    fireConfetti(); // WYWOŁANIE FAJERWERKÓW
+    }
+}
+
+// 3. Obsługa zdarzeń
+pinInputs.forEach((input, index) => {
+    input.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        if (e.target.value.length === 1) {
+            focusNext(index);
+        }
+    });
+
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace') {
+            if (input.value.length === 0) {
+                focusPrev(index);
+                e.preventDefault();
+            }
+        } else if (e.key === 'ArrowLeft') {
+            focusPrev(index);
+            e.preventDefault();
+        } else if (e.key === 'ArrowRight') {
+            focusNext(index);
+            e.preventDefault();
+        } else if (e.key === 'Enter') {
+            checkPin();
+        }
+    });
+});
+
+
+</script>
+
+
+
+
+
 
 
 
