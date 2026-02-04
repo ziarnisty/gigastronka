@@ -2,7 +2,7 @@
 <html lang="pl">
 
 <head>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../logowanie/logowanie.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nieźle co?</title>
@@ -15,12 +15,12 @@
     <div class="nav-content">
         
         <ul class="nav-links" id="nav-menu">
-            <li><a href="#home" class="active">Główna</a></li>
+            <li><a href="/index.html">Główna</a></li>
             <li><a href="#projects">Projekty</a></li>
             <li><a href="#contact">Kontakt</a></li>
 
 
-            <li class="push-right"><a href="/logowanie/logowanie.html">Logowanie</a></li>
+            <li class="push-right"><a href="logowanie.html" class="active">Logowanie</a></li>
             <li><a href="#rejestracja">Rejestracja</a></li>
         </ul>
 
@@ -33,52 +33,49 @@
 
 </nav>
 
-<div class="main-container">
-    <div id="game-container" class="bajer pin-game">
-        <h1>Zgadnij Liczbę</h1>
-        <div class="pin-inputs">
-            <input type="text" maxlength="1" class="pin-digit" id="d1">
-            <input type="text" maxlength="1" class="pin-digit" id="d2">
-            <input type="text" maxlength="1" class="pin-digit" id="d3">
-            <input type="text" maxlength="1" class="pin-digit" id="d4">
+
+<div class="login-wrapper">
+    <div id="game-container" class="bajer login-box"> <h1>Logowanie</h1>
+        <p class="podpowiedz">Wprowadź swoje dane, aby kontynuować</p>
+        
+        <form id="login-form" onsubmit="handleLogin(event)">
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Login" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Hasło" required>
+            </div>
+            
+            <button type="submit" class="login-btn">Zaloguj się</button>
+        </form>
+        
+<hr class="login-divider">
+
+<div class="login-footer">
+    </div>
+
+
+    
+
+    <div class="footer-links-container">
+        <div class="login-footer">
+            <p>Nie masz konta? </p>
+            <a href="#rejestracja" class="rej">Zarejestruj się</a>
+
+            <div class="login-footer">
+            <p>Nie pamiętasz hasła? </p> 
+            <a href="#zmienhaslo" class="rej">Zmień hasło</a>
+            </div>
+        
+
+            
         </div>
-        <p id="pin-hint" class="podpowiedz" style="opacity: 1; margin-top: 15px;">Wpisz 4 cyfry!</p>
-        <p5 class="proby">Próby: <span id="attempt-count">0</span></p5>
-
-<div class="pin-legend">
-    <div class="legend-item">
-        <span class="box-sample correct"></span>
-        <span class="legend-text">Trafiona</span>
-    </div>
-    <div class="legend-item">
-        <span class="box-sample present"></span>
-        <span class="legend-text">Liczba występuje</span>
-    </div>
-    <div class="legend-item">
-        <span class="box-sample wrong"></span>
-        <span class="legend-text">Brak liczby</span>
-    </div>
-</div>
-
-
     </div>
 </div>
 
 
 
 
-
-    <div class="bajer"> 
-        <h1>Ty tutaj?</h1>
-        <p3>Szampańska zabawa!</p3> 
-        <button onclick="window.open('https://ptoszek.pl', '_blank')">
-            Kliknij mnie
-        </button>
-        
-        
-        <span class="sub-text">!Uwaga!</span>
-    </div>
-</div>
 
 
 

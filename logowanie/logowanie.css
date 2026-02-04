@@ -7,7 +7,7 @@
 @font-face 
 {
     font-family: "naglowek";
-    src: url('fonts/Cocogoose-Pro-Semilight-trial.ttf');
+    src: url('/fonts/Cocogoose-Pro-Semilight-trial.ttf');
     font-weight: normal;
     font-style: italic;
 }
@@ -138,8 +138,16 @@ body {
 
 
 
-.bajer {
-    background: linear-gradient(90deg, 
+.login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Zajmuje środek strony poniżej navbara */
+}
+
+/* Specyficzny styl dla okna logowania */
+.login-box {
+   background: linear-gradient(90deg, 
     rgba(0, 22, 72, 0.5) 0%, 
     rgb(0, 45, 84, 0.5) 100%
     );
@@ -155,90 +163,127 @@ body {
     font-family: 'naglowek';
     color: rgb(255, 255, 255);
     box-shadow: 0 0px 30px rgba(0,0,0,0.5);
-    width: 200px;
-    
+    width: 350px;
+
     /* BAJER: Płynność przejścia */
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     cursor: default;
-    
+
+
 }
 
-p3 {
-    text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
-   
-}
-
-
-
-
-h1 {
-    letter-spacing: 2px;
-    text-shadow: 4px 4px 0px rgba(83, 83, 83, 0.5);
-}
-
-/* BAJER: Efekt po najechaniu myszką na całą kartę */
-.bajer:hover {
-    transform: translateY(-10px) scale(1.05);
+.login-box:hover {
+    transform: translateY(-1px) scale(1.02);
     box-shadow: 0 0px 40px rgba(56, 189, 248, 0.2);
     
 }
 
-.bajer h1 { /* rozjeżdżanie napisu */
-    transition: letter-spacing 0.5s ease, font-weight 0.5s ease;
-    white-space: nowrap;
-    text-align: center;
-    white-space: nowrap
-}
-
-.bajer:hover h1 {
-    /* To rozsunie wszystkie litery od siebie równomiernie */
-    letter-spacing: 2px; 
-    
-    /* Dodatkowo możemy je odchudzić, co wygląda bardzo pro */
-    
-}
-
-button {
+.rej {
     scale: 1.2;
     background: #38bdf8;
     border: none;
     box-shadow: 0 0px 25px rgba(7, 188, 204, 0.572);
     padding: 10px 20px;
     border-radius: 7px;
-    color: #0f172a;
+    color: #0f172a !important;
     font-weight: bold;
     margin-top: 20px;
+    letter-spacing: 1px;
     cursor: pointer;
     transition: 0.4s;
 }
 
-button:hover {
+.rej:hover {
     background: #f0abfc; /* Zmienia kolor na różowy przy najechaniu */
     letter-spacing: 3px; /* Rozsuwa litery */
     box-shadow: 0 0px 25px rgba(204, 7, 201, 0.756);
 }
 
-.bajer {
-    display: flex;
-    flex-direction: column; /* Układa przycisk i tekst jeden pod drugim */
-    align-items: center;    /* Środkuje oba elementy */
-    margin-top: 20px;       /* Odstęp od napisu powyżej */
+
+
+.input-group {
+    margin-right: 20px;
+    margin-bottom: 20px;
 }
 
-.sub-text {
-    font-size: 12px;        /* Bardzo mały rozmiar czcionki */
-    color: #ffffff;        /* Subtelny, szary kolor */
-    margin-top: 12px;        /* Odstęp od przycisku */
+/* Styl inputów pasujący do .pin-digit */
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.login-box input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+/* Styl przycisku */
+.login-btn {
+    scale: 1.2;
+    background: #38bdf8;
+    border: none;
+    box-shadow: 0 0px 25px rgba(7, 188, 204, 0.572);
+    padding: 10px 20px;
+    border-radius: 7px;
+    color: #0f172a !important;
+    font-family: 'naglowek';
+    font-weight: bold;
+    margin-top: 5px;
     letter-spacing: 1px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    font-family: 'Montserrat', sans-serif;
-
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: 0.4s;
+    width: 40%;
 }
 
-.bajer:hover .sub-text {
-    opacity: 1;
+.login-btn:hover {
+    width: 50%;
+    background: #f0abfc; /* Zmienia kolor na różowy przy najechaniu */
+    letter-spacing: 3px; /* Rozsuwa litery */
+    box-shadow: 0 0px 25px rgba(204, 7, 201, 0.756);
 }
+
+.login-footer {
+    font-size: 0.9em;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 30px;
+    text-decoration: none;
+}
+
+.login-footer a {
+    text-decoration: none;
+}
+
+
+.login-divider {
+    border: none;
+    height: 1.5px;
+    background: rgba(255, 255, 255, 0.1); /* Bardzo delikatny biały kolor */
+    margin top: 5px; /* Odstęp 25px nad i pod kreską */
+    width: 100%;
+}
+
+/* Opcjonalnie: jeśli chcesz, aby kreska też lekko świeciła jak przyciski */
+.login-divider {
+    box-shadow: 0 0 5px rgba(0, 183, 255, 0.2);
+}
+
+
+
+
+
+
+
+
+
+
 
 
 .stopka {
@@ -291,7 +336,7 @@ body::before {
     width: 100%;
     height: 100%;
     /* TU WPISZ NAZWĘ SWOJEGO PLIKU */
-    background-image: url('tlo.jpg'); 
+    background-image: url('/tlo.jpg'); 
     background-size: cover;
     background-position: center;
     
@@ -304,153 +349,6 @@ body::before {
 
 
 
-
-
-
-
-.main-container {
-    display: flex !important;
-    flex-direction: row-reverse !important; /* Gra po lewej, Bajer po prawej */
-    justify-content: center !important;    /* To wyśrodkuje boxy względem siebie */
-    align-items: flex-start !important;    /* Wyrównanie do góry */
-    gap: 50px !important;                 /* Odstęp między boxami */
-    
-    width: 150% !important;
-    max-width: 10px !important;          /* Ograniczamy szerokość, żeby nie "puchły" na boki */
-    margin: 250px !important;          /* AUTO wyśrodkuje cały kontener na stronie */
-}
-
-/* Upewnienie się, że boxy mają równe szanse */
-.main-container .bajer {
-    margin: 0 !important;                  /* Usuwamy stare marginesy, które mogą spychać box */
-    flex: 0 1 320px !important;            /* Stała szerokość boxów */
-}
-
-.pin-game {
-    flex: 0 1 400px !important; /* Zwiększamy z 320px na 400px */
-    width: 400px !important;
-}
-
-
-
-/* Styl dla pól wpisywania */
-.pin-inputs {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-    
-}
-
-.pin-digit {
-    width: 40px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid #334155;
-    border-radius: 8px;
-    color: white;
-    text-align: center;
-    font-family: 'Segoe UI', sans-serif !important;
-    font-size: 1.5rem;
-    font-family: 'naglowek';
-}
-
-/* Kolory trafień */
-.correct { background-color: #22c55e !important; color: #0f172a; } /* Zielony */
-.present { background-color: #eab308 !important; color: #0f172a; } /* Żółty */
-
-.pin-digit:disabled {
-    opacity: 1 !important;
-    color: #0f172a !important; /* Ciemny tekst na zielonym tle */
-    background-color: #22c55e !important; /* Twój zielony */
-    border-color: #16a34a !important;
-}
-
-
-
-
-.pin-legend {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.box-sample {
-    width: 16px;
-    height: 16px;
-    border-radius: 4px;
-    display: inline-block;
-}
-
-/* Wykorzystujemy kolory, które już masz w CSS */
-.box-sample.correct {
-    background-color: #22c55e;
-    box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
-}
-
-.box-sample.present {
-    background-color: #eab308;
-    box-shadow: 0 0 8px rgba(234, 179, 8, 0.4);
-}
-
-.legend-text {
-    padding-top: 2px;
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.6);
-    font-family: 'naglowek'
-}
-
-
-.wrong { 
-    background-color: #ef4444 !important; /* Czerwony */
-    color: white !important; 
-    border-color: #b91c1c !important;
-}
-
-/* Aktualizacja legendy w HTML (dodaj to do sekcji .pin-legend w HTML) */
-.box-sample.wrong {
-    background-color: #ef4444;
-    box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
-}
-
-#attempt-count {
-    font-weight: bold;
-    color: #38bdf8; /* Ładny błękitny kolor dla liczby prób */
-}
-
-.podpowiedz {
-    font-family: 'Segoe UI', sans-serif !important;
-    font-weight: bold !important;
-    font-size: 1.2rem !important;
-}
-
-.proby {
-    font-family: 'Segoe UI', sans-serif !important;
-    font-weight: bold !important;
-    
-}
-
-@keyframes shake-anim {
-    0%, 100% { transform: translateX(0); }
-    20% { transform: translateX(-8px); }
-    40% { transform: translateX(8px); }
-    60% { transform: translateX(-8px); }
-    80% { transform: translateX(8px); }
-}
-
-/* Klasa, którą skrypt nakłada na box */
-.shake {
-    animation: shake-anim 0.4s ease-in-out;
-    box-shadow: 0 0 15px rgba(255, 77, 77, 0.5); /* Opcjonalnie: czerwona poświata */
-}
 
 
 .nav-links {
