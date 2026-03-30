@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arbitraż Skins | Szpont AI</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="kalkulator.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+</head>
+<body>
+
+<nav class="navbar-glow">
+    <div class="nav-content">
+        <ul class="nav-links" id="nav-menu">
+            <li><a href="index.html">Główna</a></li>
+            <li><a href="kalkulator.html" class="active">Kalkulator</a></li>
+            <li><a href="#projects">Projekty</a></li>
+            <li><a href="#contact">Kontakt</a></li>
+            <li class="push-right"><a href="#">Logowanie</a></li>
+            <li><a href="#rejestracja">Rejestracja</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="main-container">
+    <div class="bajer calc-wrapper">
+        <h2>Kalkulator Handlu Skinami</h2>
+        <p3>Wybierz odpowiedni przelicznik</p3>
+
+        <div class="calc-mode-selector">
+            <!-- Dwa identyczne napisy zgodnie z Twoją prośbą -->
+            <button id="btn-to-roll" class="mode-btn active" onclick="setMode('to-roll')">
+                Kupno Float ➔ Sprzedaż Roll <br> ($ ➔ 🪙)
+            </button>
+            <button id="btn-from-roll" class="mode-btn" onclick="setMode('from-roll')">
+                Kupno Roll ➔ Sprzedaż Float <br>(🪙 ➔ $)    
+            </button>
+        </div>
+
+        <div class="calc-inputs-container">
+            <div class="calc-field">
+                <label id="label-float">Cena CSFloat ($)</label>
+                <input type="number" id="inp-float" class="calc-input" placeholder="0.00" oninput="runCalc()">
+            </div>
+            <div class="calc-field">
+                <label id="label-roll">Cena Roll (Pkt)</label>
+                <input type="number" id="inp-roll" class="calc-input" placeholder="0.00" oninput="runCalc()">
+            </div>
+        </div>
+
+        <div id="res-box" class="result-area">
+            <div id="res-content">
+                <span style="opacity: 0.5;">Wpisz dane powyżej...</span>
+            </div>
+        </div>
+        
+
+        <span class="sub-text" id="fee-info">(szukaj poniżej < 0.67)</span>
+        <span class="sub-fee" id="fee-info">Uwzględnia opłatę 2% na csfloat!</span>
+    </div>
+    
+</div>
+
+<style>
+    /* WYŁĄCZENIE TYLKO ROZSUWANIA LITER (LETTER-SPACING) */
+
+    /* 1. Blokada dla głównego napisu H1 w kalkulatorze */
+    .calc-wrapper:hover h1 {
+        letter-spacing: 2px !important; /* Wpisz tu taką samą wartość, jaką masz bez hovera */
+    }
+
+    /* 2. Blokada dla przycisków trybu (jeśli też się rozjeżdżają) */
+    .mode-btn:hover {
+        letter-spacing: 0px !important; 
+    }
+
+  
+
+   .sub-text {
+    font-size: 12px;
+    color: #ffffff;
+    margin-top: 12px;
+    letter-spacing: 1px;
+    /* Zmień z 0 na 1, aby tekst był zawsze widoczny */
+    opacity: 1 !important; 
+    transition: none; /* Opcjonalnie usuń animację pojawiania się */
+    font-family: 'Montserrat', sans-serif;
+    display: block;
+}
+</style>
+
+<footer class="stopka">
+    <p>&copy; 2026 Karol Moskalewicz | Trader Tool</p>
+</footer>
+
+<script>
+    let mode = 'to-roll';
+
+    function setMode(m) {
+        mode = m;
+        const feeInfo = document.getElementById('fee-info');
+        
+        // Zmiana opisu podpowiedzi na dole
+        if (m === 'to-roll') {
+            feeInfo.innerText = "(szukaj poniżej < 0.67)";
+        } else {
+            feeInfo.innerText = "(szukaj powyżej > 0.7)";
+        }
+
+        document.getElementById('btn-to-roll').classList.toggle('active', m === 'to-roll');
+        document.getElementById('btn-from-roll').classList.toggle('active', m === 'from-roll');
+        runCalc();
+    }
+
+function runCalc() {
+    const f = parseFloat(document.getElementById('inp-float').value);
+    const r = parseFloat(document.getElementById('inp-roll').value);
+    const box = document.getElementById('res-box');
+    const content = document.getElementById('res-content');
+
+    // 1. Sprawdzenie czy pola nie są puste
+    if (!f || !r || isNaN(f) || isNaN(r)) {
+        content.innerHTML = '<span style="opacity: 0.5;">Czekam na ceny...</span>';
+        box.className = "result-area";
+        return;
+    }
+
+    let ratio, label, css, percent;
+    const MARKET_BASE = 0.70; // Twoja nowa baza: 1 coin = 0.70$
+
+    if (mode === 'to-roll') {
+        // TRYB WPŁATY ($ -> 🪙)
+        ratio = f / r;
+        // Zysk jest wtedy, gdy ratio jest NIŻSZE niż baza
+        percent = ((MARKET_BASE - ratio) / MARKET_BASE) * 100;
+        
+        if (ratio <= 0.63) { label = "ŚWIETNA WPŁATA"; css = "res-best"; }
+        else if (ratio <= 0.68) { label = "DOBRA WPŁATA"; css = "res-good"; }
+        else if (ratio <= 0.71) { label = "NEUTRALNIE"; css = "res-neutral"; }
+        else { label = "STRATA (DROGO)"; css = "res-bad"; }
+    } else {
+        // TRYB WYPŁATY (🪙 -> $)
+        const cleanMoney = f * 0.98; // Odejmujemy 2% podatku Floata
+        ratio = cleanMoney / r;
+        // Zysk jest wtedy, gdy ratio jest WYŻSZE niż baza
+        percent = ((ratio - MARKET_BASE) / MARKET_BASE) * 100;
+
+        if (ratio >= 0.75) { label = "POTĘŻNA WYPŁATA"; css = "res-best"; }
+        else if (ratio >= 0.71) { label = "ZYSKOWNA WYPŁATA"; css = "res-good"; }
+        else if (ratio >= 0.68) { label = "WYJŚCIE NA ZERO"; css = "res-neutral"; }
+        else { label = "STRATA NA WYPŁACIE"; css = "res-bad"; }
+    }
+
+    // 2. Kolorowanie procentów
+    const color = percent >= 0 ? "#4ade80" : "#f87171"; // Zielony / Czerwony
+    const sign = percent >= 0 ? "+" : "";
+
+    // 3. Aktualizacja wyglądu boxa
+    box.className = `result-area ${css}`;
+    
+    // 4. Wpisanie wyniku do HTML
+    content.innerHTML = `
+        <div class="ratio-label">${label}</div>
+        <div class="ratio-number">${ratio.toFixed(3)}</div>
+        <div class="percent-badge" style="color: ${color};">
+            ${sign}${percent.toFixed(1)}% <span class="vs-text">vs market</span>
+        </div>
+    `;
+}
+
+    // Navbar efekt glow z Twojego kodu głównego
+    const navbar = document.querySelector('.navbar-glow');
+    navbar.addEventListener('mousemove', (e) => {
+        const rect = navbar.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        navbar.style.backgroundImage = `radial-gradient(circle at ${x}px ${y}px, rgba(255, 255, 255, 0.05), transparent 120px), linear-gradient(90deg, rgba(0, 22, 72, 0.55), rgba(0, 45, 84, 0.55))`;
+    });
+</script>
+</body>
+</html>
