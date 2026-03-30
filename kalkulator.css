@@ -1,147 +1,341 @@
 /* KALKULATOR - DEDYKOWANY STYL */
 
 .calc-wrapper {
-    flex: 0 1 450px !important; 
-    min-width: 450px;
+    flex: 0 1 400px !important; 
+    min-width: 400px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 20px;
 }
 
 .calc-wrapper:hover {
-        /* Przywracamy pozycję zero i skalę 1:1 */
-        transform: translateY(0) scale(1) !important;
-        
-        /* Jeśli chcesz zostawić poświatę (glow), nie dopisuj nic więcej. 
-           Jeśli chcesz wyłączyć też poświatę, odkomentuj linię poniżej: */
-        /* box-shadow: 0 0px 30px rgba(0,0,0,0.5) !important; */
-    }
+    transform: translateY(0) scale(1) !important;
+}
 
+/* PANEL KURSU - ŚCIŚNIĘTY */
+.market-rate-panel {
+    font-family: 'Segoe UI', sans-serif !important; 
+    margin: 8px 0 0px 0;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    border: 1px dashed rgba(56, 189, 248, 0.3);
+    width: 140px;
+}
+
+.rate-input-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.rate-label {
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.market-rate-panel input {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid #334155;
+    border-radius: 4px;
+    color: #fff;
+    width: 50px;
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: bold;
+    outline: none;
+    padding: 2px;
+}
+
+/* PRZYCISKI - PRZYWRÓCONE CIENIE I STYL */
 .calc-mode-selector {
     display: flex;
     justify-content: center;
-    gap: 50px;
-    margin: 20px 0;
-    width: 100%;
-    scale: 100%;
-}
-
-.sub-fee {
-    font-size: 15px;
-    color: #ff0000;
-    margin-top: 20px;
-    letter-spacing: 1px;
-    /* Zmień z 0 na 1, aby tekst był zawsze widoczny */
-    opacity: 1 !important; 
-    transition: none; /* Opcjonalnie usuń animację pojawiania się */
-    font-weight: 1000 !important;
-    font-family: 'Montserrat', sans-serif;
-    display: block;
+    gap: 40px;
+    margin: 0px 0 30px;
+    width: 85%;
+    
 }
 
 .mode-btn {
+    letter-spacing: normal !important;
     flex: 1;
-    background: rgba(255, 255, 255, 0.05);
+
+    background: rgba(255, 255, 255, 0.03);
+
     border: 1px solid #334155;
-    padding: 10px;
-    border-radius: 8px;
-    color: rgba(255, 255, 255, 0.6);
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    color: rgb(255, 255, 255);
+
+    font-size: 0.75rem;
+
     cursor: pointer;
-    font-family: 'naglowek', sans-serif;
-    font-size: 0.67rem;
+
     transition: 0.3s;
-    box-shadow: 0 0 15px rgba(56, 191, 248, 0);
+    box-shadow: 0 0 20px rgba(56, 191, 248, 0);
+
 }
+
 
 .mode-btn.active {
+
     background: #38bdf8;
+
     color: #0f172a;
+
     border-color: #38bdf8;
-    box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+
+    box-shadow: 0 0 20px rgba(56, 191, 248, 0.745);
+
 }
 
+/* INPUTY */
 .calc-inputs-container {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 15px;
 }
 
 .calc-field label {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     color: #64748b;
     text-transform: uppercase;
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
 }
 
 .calc-input {
     width: 100%;
-    height: 50px;
+    height: 42px;
     background: rgba(0, 0, 0, 0.2);
     border: 1px solid #334155;
-    border-radius: 10px;
+    border-radius: 8px;
     color: #38bdf8;
     text-align: center;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     outline: none;
-    box-sizing: border-box;
 }
 
-.calc-input:focus {
-    border-color: #f0abfc;
-}
-
+/* WYNIK - ŚCIŚNIĘTY */
 .result-area {
-    width: 100%;
-    padding: 15px;
+    width: 90%;
+    padding: 12px;
     border-radius: 12px;
     border: 2px solid #334155;
     background: rgba(15, 23, 42, 0.4);
-    min-height: 90px;
+    min-height: 160px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    box-sizing: border-box;
+    
 }
 
+.ratio-number { 
+    font-family: 'Segoe UI', sans-serif !important; 
+    align-items: center;
+}
 
-
-.percent-badge {
+/* STOPKA - PRZYWRÓCONA CZCIONKA */
+.sub-fee {
+    font-size: 15px; /* Przywrócona wielkość */
+    color: #ff0000;
+    margin-top: 15px;
+    letter-spacing: 1px;
+    opacity: 1 !important; 
+    font-weight: 1000 !important;
+    font-family: 'Montserrat', sans-serif; /* Przywrócona czcionka */
     display: block;
-    font-weight: 900;
-    font-size: 1.2rem;
-    margin-top: 8px;
-    text-shadow: 0 0 10px rgba(0,0,0,0.3);
+    text-transform: none; /* Reset uppercase */
+}
+
+.sub-text {
+    font-size: 12px;
+    color: #ffffff;
+    margin-top: 10px;
+    letter-spacing: 1px;
     font-family: 'Montserrat', sans-serif;
+    display: block;
+    opacity: 1 !important;
 }
 
-.vs-text {
-    font-size: 0.8rem;
-    font-weight: normal;
-    opacity: 0.7;
-    margin-left: 5px;
-}
-
-
-
-
-
-
-/* Statusy kolorów */
+/* STATUSY */
 .res-best { border-color: #22c55e; color: #22c55e; box-shadow: 0 0 15px rgba(34, 197, 94, 0.2); }
 .res-good { border-color: #38bdf8; color: #38bdf8; box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); }
 .res-neutral { border-color: #eab308; color: #eab308; box-shadow: 0 0 15px rgba(234, 179, 8, 0.2); }
 .res-bad { border-color: #ef4444; color: #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
 
-.ratio-label { font-family: 'naglowek'; font-size: 0.8rem; margin-bottom: 5px; }
-.ratio-number { 
-    font-size: 2.0rem; 
-    font-weight: bold; 
-    /* Wymuszamy standardową czcionkę dla liczb, aby uniknąć "ślaczków" */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important; 
+
+.percent-badge {
+
     display: block;
-    margin-top: 5px;
+
+    font-weight: 900;
+
+    font-size: 1.2rem;
+
+    margin-top: 8px;
+
+    text-shadow: 0 0 10px rgba(0,0,0,0.3);
+
+    font-family: 'Montserrat', sans-serif;
+
+}
+
+
+
+.vs-text {
+
+    font-size: 0.8rem;
+
+    font-weight: normal;
+
+    opacity: 0.7;
+
+    margin-left: 5px;
+
+}
+
+
+
+.copy-container {
+
+    position: relative;
+
+    display: inline-block;
+
+    margin-left: 0px; /* Zwiększony odstęp od liczby */
+    margin-bottom: 15px;
+
+    vertical-align: middle;
+
+}
+
+
+
+.copy-icon-btn {
+
+    background: none;
+
+    border: none;
+
+    cursor: pointer;
+
+    font-size: 1rem; /* Zmniejszony rozmiar emoji (było 1.2rem) */
+
+    padding: 2px;
+
+    transition: opacity 0.2s; /* Zamiast scale, robimy lekką zmianę przezroczystości */
+
+    line-height: 1;
+
+    opacity: 0.7;
+
+}
+
+
+
+.copy-icon-btn:hover {
+
+    opacity: 1; /* Delikatny efekt hover bez zmiany rozmiaru */
+
+}
+
+
+
+/* Styl dla dymka "Skopiowano!" */
+
+.copy-tooltip {
+
+    visibility: hidden;
+
+    background-color: #4ade80;
+
+    color: #000;
+
+    text-align: center;
+
+    border-radius: 4px;
+
+    padding: 4px 8px;
+
+    position: absolute;
+
+    z-index: 10;
+
+   
+
+    /* POZYCJA NIŻEJ: Zmienione z bottom: 125% na top: 110% */
+
+    top: 110%; /* Wyświetla się pod przyciskiem */
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+   
+
+    opacity: 0;
+
+    transition: opacity 0.3s, top 0.3s; /* Płynne pojawianie się i lekkie opadanie */
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+
+}
+
+
+
+.copy-tooltip.show {
+
+    visibility: visible;
+
+    opacity: 1;
+
+    top: 120%; /* Lekkie przesunięcie w dół przy pokazaniu dla lepszego efektu */
+
+}
+
+.reset-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #38bdf8;
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    margin-top: -39px;
+    margin-left: 250px;
+    box-shadow: 0 0 15px rgba(56, 191, 248, 0);
+    scale: 0.9;
+}
+
+.reset-btn:hover {
+    background: rgba(56, 189, 248, 0.1);
+    border-color: #38bdf8;
+    transform: rotate(-180deg);
+    box-shadow: 0 0 15px rgba(56, 191, 248, 0.421);
+}
+
+.reset-btn:active {
+    transform: scale(0.9) rotate(-180deg);
 }

@@ -13,17 +13,35 @@
 }
 
 body {
-
-
-    padding-top: 80px;
-    background-color: #0f172a; /* Ciemne, nowoczesne tło */
+    margin: 0;
+    padding: 0;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0f172a; /* Kolor zapasowy */
+    overflow: hidden; /* Żeby nic nie wystawało */
 }
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* TU WPISZ NAZWĘ SWOJEGO PLIKU */
+    background-image: url('tlo.jpg'); 
+    background-size: cover;
+    background-position: center;
+    
+    /* TO ODPOWIADA ZA ROZMAZANIE */
+    filter: blur(8px) brightness(0.5); 
+    
+    z-index: -1; /* Tło musi być pod spodem */
+    transform: scale(1.1); /* Lekkie powiększenie, żeby nie było widać białych krawędzi od rozmazania */
+}
+
 
 
 .navbar-glow {
@@ -191,6 +209,7 @@ body {
     letter-spacing: 1px;
     cursor: pointer;
     transition: 0.4s;
+
 }
 
 .rej:hover {
@@ -240,11 +259,11 @@ body {
     margin-bottom: 20px;
     cursor: pointer;
     transition: 0.4s;
-    width: 40%;
+    width: 80%;
 }
 
 .login-btn:hover {
-    width: 50%;
+    width: 80%;
     background: #f0abfc; /* Zmienia kolor na różowy przy najechaniu */
     letter-spacing: 3px; /* Rozsuwa litery */
     box-shadow: 0 0px 25px rgba(204, 7, 201, 0.756);
@@ -253,8 +272,10 @@ body {
 .login-footer {
     font-size: 0.9em;
     color: rgba(255, 255, 255, 0.7);
-    margin-top: 30px;
+    margin-top: 5px;
     text-decoration: none;
+    width: 1000px;
+    margin-bottom: 5px;
 }
 
 .login-footer a {
@@ -264,9 +285,9 @@ body {
 
 .login-divider {
     border: none;
-    height: 1.5px;
+    height: 1.0px;
     background: rgba(255, 255, 255, 0.1); /* Bardzo delikatny biały kolor */
-    margin top: 5px; /* Odstęp 25px nad i pod kreską */
+    margin-top: 5px;
     width: 100%;
 }
 
