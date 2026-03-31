@@ -24,9 +24,29 @@
 </nav>
 
 <div class="main-container">
+
+    <!-- widget do skrzynek-->
+    
+<div class="side-widget">
+        <h3>Ceny Itemów</h3>
+        <div id="cases-list">
+            <!-- Dane załadują się automatycznie przez funkcję renderCases() -->
+        </div>
+        <button class="update-btn" onclick="updatePrices(this)">Aktualizuj</button>
+        <p class="price-source">Ceny pochodzą z serwisu Skinport</p>
+        <p class="price-source">Codziennie są aktualizowane</p>
+        <div class="side-spacer"></div>
+    </div>
+
+
+
+
+
     <div class="bajer calc-wrapper">
         <h2>Kalkulator Handlu Skinami</h2>
         <p3>Wybierz odpowiedni przelicznik</p3>
+        
+
         
         <!-- PANEL USTALANIA KURSU - NOWY FORMAT -->
         <div class="market-rate-panel">
@@ -37,6 +57,7 @@
             </div>
             
         </div>
+        
         <div>
             <button onclick="resetCalc()" class="reset-btn" title="Resetuj dane">↺</button>
         </div>
@@ -84,7 +105,15 @@
             <span class="sub-text" id="fee-info">(szukaj poniżej < 0.67)</span>
             <span class="sub-fee" id="tax-info">Uwzględnia opłatę 2% na csfloat!</span>
         </div>
+        
     </div>
+    
+
+
+
+
+
+
 </div>
 
 <footer class="stopka">
@@ -210,6 +239,259 @@
     document.getElementById('inp-roll').value = '';
     runCalc(); // Odświeży widok wyniku na "Czekam na ceny..."
 }
+
+
+
+
+
+
+
+const caseData = [
+    { name: "Kilowatt Case", price: "0.85", img: "imgs/kilowatt.png" },
+    { name: "Dreams & Nightmares Case", price: "0.62", img: "imgs/dreams.png" },
+    { name: "Glove Case", price: "5.40", img: "imgs/glove.png" },
+    { name: "Operation Breakout Weapon Case", price: "7.20", img: "imgs/breakout.png" },
+    { name: "M4A4 | Cyber Security (Factory New)", price: "45.00", img: "imgs/cyber.png" },
+    { name: "★ Kukri Knife | Fade (Factory New)", price: "850.00", img: "imgs/kukrifade.png" },
+    { name: "AK-47 | Redline (Field-Tested)", price: "18.50", img: "imgs/redline.png" },
+    { name: "★ M9 Bayonet | Fade (Factory New)", price: "1650.00", img: "imgs/m9fade.png" },
+    { name: "CS:GO Weapon Case 2", price: "12.30", img: "imgs/case2.png" }
+];
+
+// 2. FUNKCJA GENERUJĄCA (Silnik)
+function renderCases() {
+    const listContainer = document.getElementById('cases-list');
+    
+    // Sprawdzamy, czy kontener w ogóle istnieje w HTML, żeby nie było błędu
+    if (!listContainer) return;
+
+    // Generujemy kod HTML dla każdego przedmiotu
+    listContainer.innerHTML = caseData.map(c => `
+    <div class="case-item" onclick="setPrice(${c.price}, this)"> <!-- Dodajemy 'this' -->
+        <div class="case-info-block">
+            <div class="case-icon-frame">
+                <img src="${c.img}" alt="${c.name}" class="case-icon-img">
+            </div>
+            <span class="case-name">${c.name}</span>
+        </div>
+        <span class="price">$${c.price}</span>
+        
+        <!-- TYMCZASOWY DYMEK -->
+        <span class="copy-badge">Wklejono do kalkulatora!</span>
+    </div>
+    `).join('');
+}
+
+function setPrice(val, element) {
+    // 1. Kopiowanie ceny do inputa
+    const input = document.getElementById('inp-float');
+    if (input) {
+        input.value = val;
+        if (typeof runCalc === "function") runCalc();
+    }
+
+    // 2. Obsługa dymka "Skopiowano!"
+    const badge = element.querySelector('.copy-badge');
+    if (badge) {
+        badge.classList.add('show'); // Pokazuje dymek
+
+        // Usuwa dymek po 1.5 sekundy
+        setTimeout(() => {
+            badge.classList.remove('show');
+        }, 1500);
+    }
+}
+
+
+
+
+async function updatePrices(btnElement) {
+    const lockUntil = localStorage.getItem('api_lock_until');
+    if (lockUntil && Date.now() < parseInt(lockUntil)) {
+        runButtonTimer(btnElement, parseInt(lockUntil));
+        return;
+    }
+    const originalText = "Aktualizuj"; // Tekst bazowy
+    
+    
+    // Blokada przycisku na czas ładowania
+    if (btnElement) {
+        btnElement.innerText = "Synchronizacja...";
+        btnElement.style.pointerEvents = "none";
+        btnElement.style.opacity = "0.7";
+        btnElement.classList.add('updating');
+    }
+
+    try {
+        // === TUTAJ WKLEJ SWÓJ LINK Z GOOGLE APPS SCRIPT ===
+        const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbySgchVVL-YzZmKxbmSoAf0YFeUvGgU0S5tp4YXe4ILtTd_YXVo4FjmAJDujypyhjuu/exec'; 
+        
+        const response = await fetch(googleScriptUrl);
+
+        
+        if (!response.ok) {
+            // Obsługa błędów HTTP (np. 429, 500)
+            if (response.status === 429) throw new Error("LIMIT");
+            throw new Error("HTTP_ERROR");
+        }
+
+        const data = await response.json();
+
+        // Jeśli skrypt Google zwrócił błąd wewnątrz JSONa
+        if (data.error) {
+            if (data.error.includes("limit") || data.error.includes("429")) throw new Error("LIMIT");
+            throw new Error("SERVER_ERROR");
+        }
+
+
+        let updatedCount = 0;
+        caseData.forEach(item => {
+            if (data[item.name]) {
+                const info = data[item.name];
+                
+                // Aktualizacja ceny głównej
+                item.price = parseFloat(info.price).toFixed(2);
+                
+                // Przypisanie trendu obliczonego przez Google
+                item.trend = info.trend;
+                
+                updatedCount++;
+            }
+        });
+
+        console.log(`Zaktualizowano dane dla ${updatedCount} przedmiotów.`);
+        // Odświeżenie widoku (tabela/lista skrzynek)
+        renderCases();
+
+        // Sukces - zielony przycisk
+        if (btnElement) {
+            btnElement.innerText = "Zaktualizowano!";
+            btnElement.style.background = "#4ade80"; 
+            btnElement.style.color = "#0f172a";
+            btnElement.classList.remove('updating');
+        }
+
+    } catch (error) {
+        console.error("Szczegóły błędu:", error);
+        
+        if (btnElement) {
+            // Rozpoznawanie typów błędów i przypisywanie kolorów/tekstów
+            btnElement.classList.remove('updating');
+
+            if (error.message === "LIMIT") {
+                const expiry = Date.now() + (2 * 60 * 1000); // 5 minut
+            localStorage.setItem('api_lock_until', expiry);
+            runButtonTimer(btnElement, expiry);
+            return;
+            } else if (error.message === "SERVER_ERROR" || error.message.includes("Unexpected token")) {
+                btnElement.innerText = "Błąd serwera (CORS)";
+                btnElement.style.background = "#f87171"; // Czerwony
+                btnElement.style.color = "#ffffff";
+            } else {
+                btnElement.innerText = "Błąd połączenia";
+                btnElement.style.background = "#f87171"; // Czerwony
+                btnElement.style.color = "#ffffff";
+            }
+        }
+    }
+        
+    // Powrót przycisku do stanu normalnego po 2.5 sekundy
+    setTimeout(() => {
+        if (btnElement) {
+            btnElement.innerText = originalText;
+            btnElement.style.background = ""; // Wraca do CSS
+            btnElement.style.color = "";
+            btnElement.style.pointerEvents = "auto";
+            btnElement.style.opacity = "1";
+        }
+    }, 2000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Znajdujemy nasz przycisk aktualizacji w HTML
+    const updateBtn = document.querySelector('.update-btn');
+    
+    // Jeśli przycisk istnieje, wywołujemy funkcję aktualizacji
+    if (updateBtn) {
+        updatePrices(updateBtn);
+    }
+});
+
+
+
+// trendy
+function renderCases() {
+    const listContainer = document.getElementById('cases-list'); // Poprawione ID
+    
+    if (!listContainer) return;
+
+    listContainer.innerHTML = caseData.map(c => {
+        // Przygotowanie HTML dla trendu
+        let trendHTML = '';
+        if (c.trend !== undefined) {
+            const isPositive = c.trend > 0;
+            const isNegative = c.trend < 0;
+            const color = isPositive ? '#4ade80' : (isNegative ? '#f87171' : '#94a3b8');
+            const icon = isPositive ? '▲ +' : (isNegative ? '▼ ' : '■ ');
+            
+            trendHTML = `
+                <span style="font-size: 0.75rem; color: ${color}; font-weight: 600; margin-top: 2px;">
+                    ${icon}${Math.abs(c.trend).toFixed(1)}%
+                </span>
+            `;
+        }
+
+        return `
+        <div class="case-item" onclick="setPrice(${c.price}, this)">
+            <div class="case-info-block">
+                <div class="case-icon-frame">
+                    <img src="${c.img}" alt="${c.name}" class="case-icon-img">
+                </div>
+                <span class="case-name">${c.name}</span>
+            </div>
+            
+            <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end;">
+                <span class="price" style="color: #4ade80; font-weight: bold;">$${c.price}</span>
+                ${trendHTML}
+            </div>
+            
+            <span class="copy-badge">Wklejono do kalkulatora!</span>
+        </div>
+        `;
+    }).join('');
+}
+
+
+
+function runButtonTimer(btn, expiry) {
+    if (!btn) return;
+    const interval = setInterval(() => {
+        const now = Date.now();
+        const timeLeft = expiry - now;
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+            localStorage.removeItem('api_lock_until');
+            btn.innerText = "Aktualizuj";
+            btn.style.background = "";
+            btn.style.pointerEvents = "auto";
+            return;
+        }
+        const mins = Math.floor(timeLeft / 60000);
+        const secs = Math.floor((timeLeft % 60000) / 1000);
+        btn.innerText = `Zwolnij! (${mins}:${secs < 10 ? '0' : ''}${secs})`;
+        btn.style.background = "#facc15";
+        btn.style.pointerEvents = "none";
+    }, 1000);
+}
+
+
+
+
+
 </script>
 </body>
 </html>
+
+
+
+

@@ -7,10 +7,12 @@
     flex-direction: column;
     align-items: center;
     padding: 20px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.303);
 }
 
 .calc-wrapper:hover {
     transform: translateY(0) scale(1) !important;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.303);
 }
 
 /* PANEL KURSU - ŚCIŚNIĘTY */
@@ -331,11 +333,243 @@
 
 .reset-btn:hover {
     background: rgba(56, 189, 248, 0.1);
-    border-color: #38bdf8;
+    color: #e658ff;
+    border-color: #e658ff;
     transform: rotate(-180deg);
-    box-shadow: 0 0 15px rgba(56, 191, 248, 0.421);
+    box-shadow: 0 0 15px rgba(213, 56, 248, 0.421);
 }
 
 .reset-btn:active {
     transform: scale(0.9) rotate(-180deg);
+}
+
+
+
+
+
+ /* wigdet do skrzynek */
+ 
+.main-container {
+    display: flex;
+    justify-content: center; /* To trzyma kalkulator IDEALNIE na środku */
+    align-items: flex-start;
+    width: 100%;
+    min-height: 80vh;
+    margin-top: 300px !important;
+    margin-left: 730px !important;
+    position: relative; /* Ważne: baza dla widgetu */
+    gap: 40px;
+}
+
+/* Styl bocznego panelu */
+.side-widget {
+    top: 0;                 /* Wyrównanie do góry kontenera */
+    
+    /* Dodaj to: */
+    transform: translate(0px, 10%);
+    width: 350px !important;
+    top: 0;
+    padding: 0 20px;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    padding: 30px;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    z-index: 10;
+}
+
+/* Dodatkowa poprawka dla Twojego kalkulatora */
+.calc-wrapper {
+    /* Upewnij się, że ten box ma określoną szerokość, np. */
+    width: 500px; 
+    flex: 0 0 450px !important;
+}
+
+/* RESPONSYWNOŚĆ: Na małych ekranach widget może zasłaniać kalkulator, 
+   więc go chowamy lub zmieniamy pozycję */
+@media (max-width: 1200px) {
+    .side-widget {
+        display: none; /* Ukrywa boczny panel na mniejszych ekranach */
+    }
+}
+
+/* --- Reszta Twoich stylów bez zmian --- */
+.side-widget h3 {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: #38bdf8;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 10px;
+    font-family: naglowek;
+    margin-top: -2px;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+
+.case-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.price {
+    font-weight: bold;
+    color: #4ade80;
+}
+
+.update-btn {
+    width: 80%;             /* Stała szerokość na 100% szerokości widgetu */
+    padding: 10px 0;         /* Stały padding, który się nie zmienia */
+    letter-spacing: normal !important;  /* Standardowy odstęp między literami */
+    transition: background 0.3s ease, box-shadow 0.3s ease; /* Animujemy TYLKO kolor i cień */
+    margin-left: 30px;
+    /* Reszta Twoich stylów */
+    background: #38bdf8;
+    border: none;
+    border-radius: 8px;
+    color: #0f172a;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.side-spacer {
+    width: 350px !important;
+    min-width: 350px !important;
+    flex-basis: 350px !important;
+    flex-grow: 0 !important;
+    flex-shrink: 0 !important;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+
+
+
+.case-info-block {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Odstęp między obrazkiem a tekstem */
+    flex: 1;
+}
+
+/* Ramka, która ogranicza wielkość obrazka 360x360 */
+.case-icon-frame {
+    width: 70px;         /* Stała szerokość ikonki w widgecie */
+    height: 50px;        /* Stała wysokość */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;      /* Zapobiega zgniataniu ikonki */
+}
+
+/* Sam obrazek */
+.case-icon-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Pilnuje proporcji - obrazek się nie rozciągnie */
+    filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.2)); /* Delikatny glow */
+}
+
+/* Poprawka dla wiersza, żeby wszystko było w jednej linii */
+.case-item {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 12px;
+    margin-bottom: 0px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.101);
+    cursor: pointer;
+    transition: background 0.2s;
+    
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.case-item:hover {
+    background: rgba(56, 189, 248, 0.1);
+    background: rgba(56, 189, 248, 0.05);
+    transform: translateY(-3px);
+    border-radius: 10px;
+}
+
+.copy-badge {
+    position: absolute;
+    right: 20px;
+    background: #4ade80;
+    color: #0f172a;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    opacity: 0;           /* Domyślnie niewidoczny */
+    pointer-events: none; /* Żeby nie przeszkadzał w klikaniu */
+    transition: all 0.3s ease;
+    transform: translateY(0);
+    }
+
+    .copy-badge.show {
+    opacity: 1;
+    transform: translateY(-25px); /* Lekko unosi się do góry */
+    }
+
+    .price-source {
+    display: block;           /* Zajmuje całą szerokość pod przyciskiem */
+    text-align: center;       /* Środkuje napis względem przycisku */
+    font-size: 0.85rem;       /* Bardzo mały, czytelny rozmiar */
+    color: #94a3b8;           /* Delikatny, stalowy szary */
+    margin-top: 22px;         /* Odstęp od przycisku */
+    opacity: 0.6;             /* Lekkie przygaszenie */
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0.5px;    /* Odstępy między literami dla lepszej czytelności */
+    pointer-events: none;     /* Tekst nie reaguje na kliknięcia */
+    margin-bottom: -20px;
+    
+}
+
+.update-btn:hover {
+    background: #e75eff; /* Zmienia kolor na różowy przy najechaniu */
+    letter-spacing: 3px; /* Rozsuwa litery */
+    box-shadow: 0 0px 25px rgba(204, 7, 201, 0.756);
+}
+
+@keyframes pulse-opacity {
+    0% { opacity: 0.7; }
+    50% { opacity: 0.4; }
+    100% { opacity: 0.7; }
+}
+
+.updating {
+    animation: pulse-opacity 1s infinite ease-in-out;
+}
+
+#cases-list {
+    max-height: 400px;      /* Tutaj ustalasz, jak wysoki ma być widget */
+    overflow-y: auto;       /* Włącza scroll, gdy itemy nie mieszczą się w 400px */
+    overflow-x: hidden;     /* Blokuje poziome przesuwanie */
+    padding-right: 10px;    /* Odstęp, żeby scroll nie dotykał cen */
+    margin-bottom: 20px;    /* Odstęp od przycisku Aktualizuj */
+}
+
+/* STYLIZACJA PASKA PRZEWIJANIA (Custom Scrollbar) */
+#cases-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+#cases-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+#cases-list::-webkit-scrollbar-thumb {
+    background: rgba(56, 189, 248, 0.4); /* Twój błękitny kolor */
+    border-radius: 10px;
+}
+
+#cases-list::-webkit-scrollbar-thumb:hover {
+    background: #e75eff; /* Zmiana na różowy przy najechaniu - jak Twój button! */
 }

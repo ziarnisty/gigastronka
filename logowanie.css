@@ -181,7 +181,7 @@ body::before {
     font-family: 'naglowek';
     color: rgb(255, 255, 255);
     box-shadow: 0 0px 30px rgba(0,0,0,0.5);
-    width: 350px;
+    width: 280px !important;
 
     /* BAJER: Płynność przejścia */
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -272,9 +272,9 @@ body::before {
 .login-footer {
     font-size: 0.9em;
     color: rgba(255, 255, 255, 0.7);
-    margin-top: 5px;
+    margin-top: 25px;
     text-decoration: none;
-    width: 1000px;
+
     margin-bottom: 5px;
 }
 
@@ -289,6 +289,7 @@ body::before {
     background: rgba(255, 255, 255, 0.1); /* Bardzo delikatny biały kolor */
     margin-top: 5px;
     width: 100%;
+    margin-bottom: -40px;
 }
 
 /* Opcjonalnie: jeśli chcesz, aby kreska też lekko świeciła jak przyciski */
