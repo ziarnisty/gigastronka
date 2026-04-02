@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="view-transition" content="same-origin">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="kalkulator.css">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
     <title>Kalkulator</title>
 </head>
 <body>
@@ -15,10 +17,10 @@
         <ul class="nav-links" id="nav-menu">
             <li><a href="index.html">Główna</a></li>
             <li><a href="kalkulator.html" class="active">Kalkulator</a></li>
-            <li><a href="#projects">Projekty</a></li>
-            <li><a href="#contact">Kontakt</a></li>
+            <li><a href="inwestycja.html">Inwestycje</a></li>
+            <li><a href="kontakt.html">Kontakt</a></li>
             <li class="push-right"><a href="logowanie.html">Logowanie</a></li>
-            <li><a href="#rejestracja">Rejestracja</a></li>
+            <li><a href="rejestracja.html">Rejestracja</a></li>
         </ul>
     </div>
 </nav>
@@ -28,9 +30,18 @@
     <!-- widget do skrzynek-->
     
 <div class="side-widget">
+    <div class="widget-header">
         <h3>Ceny Itemów</h3>
-        <div id="cases-list">
-            <!-- Dane załadują się automatycznie przez funkcję renderCases() -->
+       <div class="sort-controls" style="display: flex; gap: 12px; color: white; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; font-family: 'Montserrat', sans-serif;">
+    <div class="sort-btn" onclick="toggleSort('price')" style="cursor: pointer; display: flex; align-items: center; gap: 4px;">
+        CENA <span id="price-icon" class="sort-arrow">▲</span>
+    </div>
+    <div class="sort-btn" onclick="toggleSort('trend')" style="cursor: pointer; display: flex; align-items: center; gap: 4px;">
+        TREND <span id="trend-icon" class="sort-arrow">▲</span>
+    </div>
+</div>
+    </div>
+    <div id="cases-list">
         </div>
         <button class="update-btn" onclick="updatePrices(this)">Aktualizuj</button>
         <p class="price-source">Ceny pochodzą z serwisu Skinport</p>
@@ -242,7 +253,42 @@
 
 
 
+let currentSort = { field: 'trend', direction: 'desc' };
 
+function toggleSort(field) {
+    if (currentSort.field === field) {
+        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+        currentSort.field = field;
+        currentSort.direction = 'desc'; 
+    }
+
+    sortData(field, currentSort.direction);
+    updateSortIcons();
+    renderCases();
+}
+
+function sortData(field, direction) {
+    caseData.sort((a, b) => {
+        let valA = parseFloat(a[field]) || 0;
+        let valB = parseFloat(b[field]) || 0;
+        return direction === 'asc' ? valA - valB : valB - valA;
+    });
+}
+
+function updateSortIcons() {
+    const priceIcon = document.getElementById('price-icon');
+    const trendIcon = document.getElementById('trend-icon');
+    
+    // Resetuj obie ikony
+    priceIcon.innerText = '⇅';
+    trendIcon.innerText = '⇅';
+
+    // Ustaw aktywną ikonę
+    const icon = currentSort.direction === 'asc' ? '▲' : '▼';
+    if (currentSort.field === 'price') priceIcon.innerText = icon;
+    if (currentSort.field === 'trend') trendIcon.innerText = icon;
+}
 
 
 
@@ -259,28 +305,59 @@ const caseData = [
 ];
 
 // 2. FUNKCJA GENERUJĄCA (Silnik)
+
 function renderCases() {
-    const listContainer = document.getElementById('cases-list');
-    
-    // Sprawdzamy, czy kontener w ogóle istnieje w HTML, żeby nie było błędu
+    const listContainer = document.getElementById('cases-list'); 
     if (!listContainer) return;
 
-    // Generujemy kod HTML dla każdego przedmiotu
-    listContainer.innerHTML = caseData.map(c => `
-    <div class="case-item" onclick="setPrice(${c.price}, this)"> <!-- Dodajemy 'this' -->
+listContainer.innerHTML = caseData.map(c => {
+    let trendHTML = '';
+    
+    // Sprawdzamy czy trend w ogóle istnieje w danych
+    if (c.trend !== undefined && c.trend !== null) {
+        const trendValue = parseFloat(c.trend);
+        let color, icon, displayValue;
+
+        if (trendValue > 0) {
+            color = '#4ade80'; // Zielony
+            icon = '▲ +';
+            displayValue = trendValue.toFixed(1) + '%';
+        } else if (trendValue < 0) {
+            color = '#f87171'; // Czerwony
+            icon = '▼ -';
+            displayValue = Math.abs(trendValue).toFixed(1) + '%';
+        } else {
+            // OPCJA DLA ZERA
+            color = '#94a3b8'; // Szary
+            icon = '■ ';
+            displayValue = '0%'; // Bez miejsc po przecinku zgodnie z prośbą
+        }
+
+        trendHTML = `<span style="font-size: 0.75rem; color: ${color}; font-weight: 600; margin-top: 2px;">
+            ${icon}${displayValue}
+        </span>`;
+    }
+
+    const formattedPrice = parseFloat(c.price).toFixed(2);
+
+    return `
+    <div class="case-item" onclick="setPrice(${c.price}, this)">
         <div class="case-info-block">
             <div class="case-icon-frame">
                 <img src="${c.img}" alt="${c.name}" class="case-icon-img">
             </div>
             <span class="case-name">${c.name}</span>
         </div>
-        <span class="price">$${c.price}</span>
-        
-        <!-- TYMCZASOWY DYMEK -->
-        <span class="copy-badge">Wklejono do kalkulatora!</span>
-    </div>
-    `).join('');
+        <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; justify-content: center; min-height: 40px;">
+            <span class="price" style="color: #4ade80; font-weight: bold;">$${formattedPrice}</span>
+            ${trendHTML}
+        </div>
+        <span class="copy-badge">Wklejono!</span>
+    </div>`;
+}).join('');
 }
+
+
 
 function setPrice(val, element) {
     // 1. Kopiowanie ceny do inputa
@@ -306,189 +383,223 @@ function setPrice(val, element) {
 
 
 async function updatePrices(btnElement) {
+    const originalText = "Aktualizuj";
     const lockUntil = localStorage.getItem('api_lock_until');
+
+    // Jeśli jest aktywna blokada, uruchom timer i wyjdź
     if (lockUntil && Date.now() < parseInt(lockUntil)) {
-        runButtonTimer(btnElement, parseInt(lockUntil));
+        runErrorTimer(btnElement, parseInt(lockUntil));
         return;
     }
-    const originalText = "Aktualizuj"; // Tekst bazowy
-    
-    
-    // Blokada przycisku na czas ładowania
+
     if (btnElement) {
         btnElement.innerText = "Synchronizacja...";
         btnElement.style.pointerEvents = "none";
-        btnElement.style.opacity = "0.7";
         btnElement.classList.add('updating');
     }
 
     try {
-        // === TUTAJ WKLEJ SWÓJ LINK Z GOOGLE APPS SCRIPT ===
         const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbySgchVVL-YzZmKxbmSoAf0YFeUvGgU0S5tp4YXe4ILtTd_YXVo4FjmAJDujypyhjuu/exec'; 
-        
         const response = await fetch(googleScriptUrl);
 
-        
-        if (!response.ok) {
-            // Obsługa błędów HTTP (np. 429, 500)
-            if (response.status === 429) throw new Error("LIMIT");
-            throw new Error("HTTP_ERROR");
-        }
+        if (!response.ok) throw new Error("HTTP_ERROR");
 
         const data = await response.json();
 
-        // Jeśli skrypt Google zwrócił błąd wewnątrz JSONa
         if (data.error) {
-            if (data.error.includes("limit") || data.error.includes("429")) throw new Error("LIMIT");
-            throw new Error("SERVER_ERROR");
+            // Jeśli Google zwróci błąd limitu
+            const expiry = Date.now() + (2 * 60 * 1000); // 2 minuty blokady
+            localStorage.setItem('api_lock_until', expiry);
+            runErrorTimer(btnElement, expiry);
+            return;
         }
 
-
+        // Aktualizacja caseData o dane z serwera
         let updatedCount = 0;
         caseData.forEach(item => {
             if (data[item.name]) {
-                const info = data[item.name];
-                
-                // Aktualizacja ceny głównej
-                item.price = parseFloat(info.price).toFixed(2);
-                
-                // Przypisanie trendu obliczonego przez Google
-                item.trend = info.trend;
-                
+                item.price = parseFloat(data[item.name].price).toFixed(2);
+                item.trend = data[item.name].trend;
                 updatedCount++;
             }
         });
 
-        console.log(`Zaktualizowano dane dla ${updatedCount} przedmiotów.`);
-        // Odświeżenie widoku (tabela/lista skrzynek)
+        // ZAPISZ DO PAMIĘCI (LocalStorage)
+        localStorage.setItem('cached_case_data', JSON.stringify(caseData));
+        localStorage.setItem('last_full_update', Date.now());
+
         renderCases();
 
-        // Sukces - zielony przycisk
         if (btnElement) {
             btnElement.innerText = "Zaktualizowano!";
             btnElement.style.background = "#4ade80"; 
             btnElement.style.color = "#0f172a";
-            btnElement.classList.remove('updating');
+            setTimeout(() => {
+                btnElement.innerText = originalText;
+                btnElement.style.background = "";
+                btnElement.style.color = "";
+                btnElement.style.pointerEvents = "auto";
+                btnElement.classList.remove('updating');
+            }, 2000);
         }
 
     } catch (error) {
-        console.error("Szczegóły błędu:", error);
-        
-        if (btnElement) {
-            // Rozpoznawanie typów błędów i przypisywanie kolorów/tekstów
-            btnElement.classList.remove('updating');
-
-            if (error.message === "LIMIT") {
-                const expiry = Date.now() + (2 * 60 * 1000); // 5 minut
-            localStorage.setItem('api_lock_until', expiry);
-            runButtonTimer(btnElement, expiry);
-            return;
-            } else if (error.message === "SERVER_ERROR" || error.message.includes("Unexpected token")) {
-                btnElement.innerText = "Błąd serwera (CORS)";
-                btnElement.style.background = "#f87171"; // Czerwony
-                btnElement.style.color = "#ffffff";
-            } else {
-                btnElement.innerText = "Błąd połączenia";
-                btnElement.style.background = "#f87171"; // Czerwony
-                btnElement.style.color = "#ffffff";
-            }
-        }
+        console.error("Błąd aktualizacji:", error);
+        // W razie błędu sieci/CORS - ustawiamy krótką blokadę, żeby nie spamić
+        const expiry = Date.now() + (30 * 1000); // 30 sek blokady na błąd sieci
+        localStorage.setItem('api_lock_until', expiry);
+        runErrorTimer(btnElement, expiry);
     }
-        
-    // Powrót przycisku do stanu normalnego po 2.5 sekundy
-    setTimeout(() => {
-        if (btnElement) {
-            btnElement.innerText = originalText;
-            btnElement.style.background = ""; // Wraca do CSS
-            btnElement.style.color = "";
-            btnElement.style.pointerEvents = "auto";
-            btnElement.style.opacity = "1";
-        }
-    }, 2000);
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Znajdujemy nasz przycisk aktualizacji w HTML
-    const updateBtn = document.querySelector('.update-btn');
-    
-    // Jeśli przycisk istnieje, wywołujemy funkcję aktualizacji
-    if (updateBtn) {
-        updatePrices(updateBtn);
-    }
-});
 
 
 
 // trendy
-function renderCases() {
-    const listContainer = document.getElementById('cases-list'); // Poprawione ID
-    
-    if (!listContainer) return;
-
-    listContainer.innerHTML = caseData.map(c => {
-        // Przygotowanie HTML dla trendu
-        let trendHTML = '';
-        if (c.trend !== undefined) {
-            const isPositive = c.trend > 0;
-            const isNegative = c.trend < 0;
-            const color = isPositive ? '#4ade80' : (isNegative ? '#f87171' : '#94a3b8');
-            const icon = isPositive ? '▲ +' : (isNegative ? '▼ ' : '■ ');
-            
-            trendHTML = `
-                <span style="font-size: 0.75rem; color: ${color}; font-weight: 600; margin-top: 2px;">
-                    ${icon}${Math.abs(c.trend).toFixed(1)}%
-                </span>
-            `;
-        }
-
-        return `
-        <div class="case-item" onclick="setPrice(${c.price}, this)">
-            <div class="case-info-block">
-                <div class="case-icon-frame">
-                    <img src="${c.img}" alt="${c.name}" class="case-icon-img">
-                </div>
-                <span class="case-name">${c.name}</span>
-            </div>
-            
-            <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end;">
-                <span class="price" style="color: #4ade80; font-weight: bold;">$${c.price}</span>
-                ${trendHTML}
-            </div>
-            
-            <span class="copy-badge">Wklejono do kalkulatora!</span>
-        </div>
-        `;
-    }).join('');
-}
 
 
 
-function runButtonTimer(btn, expiry) {
+
+function runErrorTimer(btn, expiry) {
     if (!btn) return;
-    const interval = setInterval(() => {
+    
+    // 1. NATYCHMIASTOWE USTAWIENIE STANU (zanim ruszy licznik)
+    btn.classList.remove('updating');
+    btn.style.pointerEvents = "none";
+    btn.style.background = "#f87171"; 
+    btn.style.color = "#ffffff";
+    btn.style.opacity = "1";
+
+    // Funkcja pomocnicza do obliczania czasu, żeby nie powtarzać kodu
+    const updateText = () => {
         const now = Date.now();
         const timeLeft = expiry - now;
-        if (timeLeft <= 0) {
+        if (timeLeft <= 0) return null;
+        const mins = Math.floor(timeLeft / 30000);
+        const secs = Math.floor((timeLeft % 30000) / 1000);
+        return `Błąd! Ponów za ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    };
+
+    // Ustawiamy tekst od razu!
+    btn.innerText = updateText() || "Aktualizuj";
+
+    const interval = setInterval(() => {
+        const newText = updateText();
+        if (!newText) {
             clearInterval(interval);
             localStorage.removeItem('api_lock_until');
             btn.innerText = "Aktualizuj";
             btn.style.background = "";
+            btn.style.color = "";
             btn.style.pointerEvents = "auto";
             return;
         }
-        const mins = Math.floor(timeLeft / 60000);
-        const secs = Math.floor((timeLeft % 60000) / 1000);
-        btn.innerText = `Zwolnij! (${mins}:${secs < 10 ? '0' : ''}${secs})`;
-        btn.style.background = "#facc15";
-        btn.style.pointerEvents = "none";
+        btn.innerText = newText;
     }, 1000);
 }
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const updateBtn = document.querySelector('.update-btn');
+    
+    const cached = localStorage.getItem('cached_case_data');
+    if (cached) {
+        try {
+            const parsed = JSON.parse(cached);
+            caseData.forEach(item => {
+                const found = parsed.find(c => c.name === item.name);
+                if (found) {
+                    item.price = found.price;
+                    item.trend = found.trend;
+                }
+            });
+        } catch (e) { console.error(e); }
+    }
+    
+    sortData('trend', 'desc');
+    updateSortIcons();
+
+
+    renderCases(); 
+
+    const lockUntil = localStorage.getItem('api_lock_until');
+    const now = Date.now();
+    if (lockUntil && now < parseInt(lockUntil)) {
+        runErrorTimer(updateBtn, parseInt(lockUntil));
+        return; 
+    }
+
+    const lastUpdate = localStorage.getItem('last_full_update');
+    const oneHour = 60 * 60 * 1000;
+    const lastTime = lastUpdate ? parseInt(lastUpdate) : 0;
+
+    if (updateBtn && (now - lastTime > oneHour)) {
+        setTimeout(() => { updatePrices(updateBtn); }, 800);
+    }
+});
+
+function updateSortIcons() {
+    const pIcon = document.getElementById('price-icon');
+    const tIcon = document.getElementById('trend-icon');
+    if (!pIcon || !tIcon) return;
+
+    const setIconState = (icon, isCurrentField) => {
+        // Znajdujemy rodzica (czyli div o klasie .sort-btn)
+        const parentBtn = icon.closest('.sort-btn');
+        
+        // Resetujemy stany ikony i przycisku
+        icon.classList.remove('active', 'desc');
+        if (parentBtn) parentBtn.classList.remove('selected');
+        
+        if (isCurrentField) {
+            icon.classList.add('active');
+            if (parentBtn) parentBtn.classList.add('selected'); // Rozjaśniamy wybrany napis
+            
+            if (currentSort.direction === 'desc') {
+                icon.classList.add('desc');
+            }
+        }
+    };
+
+    setIconState(pIcon, currentSort.field === 'price');
+    setIconState(tIcon, currentSort.field === 'trend');
+}
+
+
+
 
 
 
 
 
 </script>
+
+
+<script>
+const navbar = document.querySelector('.navbar-glow');
+
+navbar.addEventListener('mousemove', (e) => {
+    const rect = navbar.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Łączymy dwa gradienty: 
+    // 1. Ruchome światełko (radial-gradient)
+    // 2. Stałe tło liniowe (linear-gradient)
+    navbar.style.backgroundImage = `
+        radial-gradient(circle at ${x}px ${y}px, rgba(255, 255, 255, 0.05), transparent 120px),
+        linear-gradient(90deg, rgba(0, 22, 72, 0.55), rgba(0, 45, 84, 0.55))
+    `;
+});
+
+navbar.addEventListener('mouseleave', () => {
+    // Przywracamy tylko stały gradient liniowy, gdy myszka ucieknie
+    navbar.style.backgroundImage = `linear-gradient(90deg, rgba(0, 22, 72, 0.55), rgba(0, 45, 84, 0.55))`;
+});
+    </script>
+
+
+
+
 </body>
 </html>
 

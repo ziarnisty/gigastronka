@@ -359,6 +359,7 @@
     margin-left: 730px !important;
     position: relative; /* Ważne: baza dla widgetu */
     gap: 40px;
+    
 }
 
 /* Styl bocznego panelu */
@@ -378,6 +379,7 @@
     color: white;
     font-family: 'Montserrat', sans-serif;
     z-index: 10;
+    
 }
 
 /* Dodatkowa poprawka dla Twojego kalkulatora */
@@ -405,7 +407,7 @@
     font-family: naglowek;
     margin-top: -2px;
     letter-spacing: 2px;
-    text-align: center;
+    text-align: left;
 }
 
 
@@ -573,3 +575,90 @@
 #cases-list::-webkit-scrollbar-thumb:hover {
     background: #e75eff; /* Zmiana na różowy przy najechaniu - jak Twój button! */
 }
+
+
+.widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+}
+
+.widget-header h3 {
+    border-bottom: none !important; /* Usuwamy stary border */
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    white-space: nowrap;
+}
+
+.sort-controls {
+    display: flex;
+    gap: 10px;
+    font-size: 1rem;
+    color: white; /* Białe napisy */
+    font-weight: 600;
+    
+    
+}
+
+.sort-btn {
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.3s ease, color 0.2s;
+    opacity: 0.35; /* Przyciemniony napis domyślnie */
+    color: white;
+    font-family: 'Montserrat', sans-serif !important;
+}
+
+.sort-btn.selected {
+    opacity: 1;
+}
+
+.sort-btn:hover {
+    color: #38bdf8;
+    opacity: 1;
+}
+
+.sort-btn small {
+    margin-left: 2px;
+}
+
+/* PASEK NAWIGACJI */
+.navbar-glow {
+  
+  
+    left: 50%;
+ 
+}
+
+/* PRZEDMIOTY W WIDGETU */
+.case-item {
+    position: relative;
+    /* Dodaj to, aby animacja nie "puchła" poza widget */
+    z-index: 1;
+    /* Zapobiega migotaniu podczas animacji */
+    backface-visibility: hidden;
+}
+
+/* Styl bazowy strzałki */
+.sort-arrow {
+    display: inline-block;
+    font-size: 0.7rem;
+    color: #38bdf8;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+    opacity: 0.3; /* Przygaszona, gdy nieaktywna */
+    transform: rotate(0deg);
+}
+
+/* Klasa dla aktywnego filtra */
+.sort-arrow.active {
+    opacity: 1;
+}
+
+/* Klasa dla kierunku malejącego (obrót o 180 stopni) */
+.sort-arrow.desc {
+    transform: rotate(180deg);
+}
+

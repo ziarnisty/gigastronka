@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="kontakt.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+    <title>Kontakt</title>
+</head>
+<body>
+
+<nav class="navbar-glow">
+    <div class="nav-content">
+        <ul class="nav-links" id="nav-menu">
+            <li><a href="index.html">Główna</a></li>
+            <li><a href="kalkulator.html">Kalkulator</a></li>
+            <li><a href="inwestycja.html" >Inwestycje</a></li>
+            <li><a href="kontakt.html" class="active">Kontakt</a></li>
+            <li class="push-right"><a href="logowanie.html">Logowanie</a></li>
+            <li><a href="rejestracja.html">Rejestracja</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="main-container">
+
+    
+    
+</div>
+
+
+<footer class="stopka">
+    <p>&copy; 2026 Karol Moskalewicz | Trader Tool</p>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+const navbar = document.querySelector('.navbar-glow');
+
+navbar.addEventListener('mousemove', (e) => {
+    const rect = navbar.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Łączymy dwa gradienty: 
+    // 1. Ruchome światełko (radial-gradient)
+    // 2. Stałe tło liniowe (linear-gradient)
+    navbar.style.backgroundImage = `
+        radial-gradient(circle at ${x}px ${y}px, rgba(255, 255, 255, 0.05), transparent 120px),
+        linear-gradient(90deg, rgba(0, 22, 72, 0.55), rgba(0, 45, 84, 0.55))
+    `;
+});
+
+navbar.addEventListener('mouseleave', () => {
+    // Przywracamy tylko stały gradient liniowy, gdy myszka ucieknie
+    navbar.style.backgroundImage = `linear-gradient(90deg, rgba(0, 22, 72, 0.55), rgba(0, 45, 84, 0.55))`;
+});
+    </script>
+
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
