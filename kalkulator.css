@@ -662,3 +662,26 @@
     transform: rotate(180deg);
 }
 
+
+/* Klasa sukcesu (Zielony Glow) */
+.update-btn.success-glow {
+    background-color: #4ade80 !important;
+    color: #0f172a !important;
+    box-shadow: 0 0 20px rgba(74, 222, 128, 0.7);
+    border-color: #4ade80 !important;
+    transform: scale(1.02); /* Lekkie powiększenie dla efektu */
+}
+
+/* Klasa błędu (Czerwony Glow) */
+.update-btn.error-glow {
+    background-color: #f87171 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 20px rgba(248, 113, 113, 0.7);
+    border-color: #f87171 !important;
+}
+
+/* Płynne przejście efektów */
+.update-btn {
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+

@@ -408,7 +408,7 @@ async function updatePrices(btnElement) {
 
         if (data.error) {
             // Jeśli Google zwróci błąd limitu
-            const expiry = Date.now() + (2 * 60 * 1000); // 2 minuty blokady
+            const expiry = Date.now() + (1 * 60 * 1000); // 2 minuty blokady
             localStorage.setItem('api_lock_until', expiry);
             runErrorTimer(btnElement, expiry);
             return;
@@ -431,10 +431,12 @@ async function updatePrices(btnElement) {
         renderCases();
 
         if (btnElement) {
+            btnElement.classList.add('success-glow');
             btnElement.innerText = "Zaktualizowano!";
             btnElement.style.background = "#4ade80"; 
             btnElement.style.color = "#0f172a";
             setTimeout(() => {
+                btnElement.classList.remove('success-glow');
                 btnElement.innerText = originalText;
                 btnElement.style.background = "";
                 btnElement.style.color = "";
@@ -444,11 +446,15 @@ async function updatePrices(btnElement) {
         }
 
     } catch (error) {
+        btnElement.classList.add('error-glow');
         console.error("Błąd aktualizacji:", error);
         // W razie błędu sieci/CORS - ustawiamy krótką blokadę, żeby nie spamić
         const expiry = Date.now() + (30 * 1000); // 30 sek blokady na błąd sieci
         localStorage.setItem('api_lock_until', expiry);
         runErrorTimer(btnElement, expiry);
+        setTimeout(() => {
+            btnElement.classList.remove('error-glow');
+        }, 3000);
     }
 }
 
@@ -463,6 +469,7 @@ function runErrorTimer(btn, expiry) {
     if (!btn) return;
     
     // 1. NATYCHMIASTOWE USTAWIENIE STANU (zanim ruszy licznik)
+    btn.classList.add('error-glow');
     btn.classList.remove('updating');
     btn.style.pointerEvents = "none";
     btn.style.background = "#f87171"; 
@@ -474,8 +481,8 @@ function runErrorTimer(btn, expiry) {
         const now = Date.now();
         const timeLeft = expiry - now;
         if (timeLeft <= 0) return null;
-        const mins = Math.floor(timeLeft / 30000);
-        const secs = Math.floor((timeLeft % 30000) / 1000);
+        const mins = Math.floor(timeLeft / 60000);
+        const secs = Math.floor((timeLeft % 60000) / 1000);
         return `Błąd! Ponów za ${mins}:${secs < 10 ? '0' : ''}${secs}`;
     };
 
@@ -487,6 +494,7 @@ function runErrorTimer(btn, expiry) {
         if (!newText) {
             clearInterval(interval);
             localStorage.removeItem('api_lock_until');
+            btn.classList.remove('error-glow');
             btn.innerText = "Aktualizuj";
             btn.style.background = "";
             btn.style.color = "";
