@@ -191,9 +191,8 @@ body::before {
 }
 
 .login-box:hover {
-    transform: translateY(-1px) scale(1.02);
-    box-shadow: 0 0px 40px rgba(56, 189, 248, 0.2);
-    
+    box-shadow: 0 0px 40px rgba(7, 188, 204, 0.3);
+    border-color: #07bccc5f; /* Twój błękit wpisany na sztywno */
 }
 
 .rej {
@@ -220,10 +219,7 @@ body::before {
 
 
 
-.input-group {
-    margin-right: 20px;
-    margin-bottom: 20px;
-}
+
 
 /* Styl inputów pasujący do .pin-digit */
 .login-box input {
@@ -365,5 +361,123 @@ body::before {
     margin: 0 !important;          /* Usuwamy ewentualne marginesy linków */
 }
 
+/* Kontener do wyśrodkowania checkboxa i tekstu */
+.remember-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    cursor: pointer;
+}
 
+/* Kursor dłoni dla tekstu */
+.remember-wrapper label {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+}
 
+/* CAŁKOWITA ZMIANA WYGLĄDU CHECKBOXA */
+.custom-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 10px !important;
+    height: 10px !important;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px; /* Delikatne zaokrąglenie */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    position: relative;
+    margin: 0;
+    
+}
+
+/* Efekt najechania (Hover) - delikatny blask */
+.custom-checkbox:hover {
+    border-color: #38bdf8;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+/* WYGLĄD PO ZAZNACZENIU */
+.custom-checkbox:checked {
+    background-color: #38bdf8;
+    border-color: #38bdf8;
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+}
+
+/* Rysowanie "Ptaszka" za pomocą czystego CSS (SVG) */
+.custom-checkbox:checked::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    /* Ptaszek w kolorze Twojego tła (#0f172a), żeby ładnie kontrastował z cyjanem */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f172a' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* BAJER: Jeśli checkbox jest zaznaczony, tekst obok też lekko zaświeci */
+.custom-checkbox:checked + label {
+    color: #38bdf8;
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
+.custom-input,
+.login-box input[type="text"], 
+.login-box input[type="password"] {
+    margin-left: 0px;
+    width: 100% !important; /* Lekko zwężone, żeby miały oddech po bokach */
+    margin-bottom: 20px !important; /* Rozsuwa okienka od siebie w pionie */
+    padding: 12px !important;
+    box-sizing: border-box !important;
+    border-radius: 8px !important;
+    color: white !important;
+    font-size: 13px !important;
+    outline: none !important;
+    font-family: 'naglowek', sans-serif !important;
+    transition: 0.3s !important;
+}
+
+/* Zmiana czcionki dla podtytułu */
+.podpowiedz {
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 400 !important; /* 400 to standardowa grubość, możesz zmienić na 700 jeśli wolisz pogrubiony */
+    font-size: 14px !important; /* Możesz lekko dostosować rozmiar */
+    letter-spacing: 0.5px !important; /* Lekkie rozsunięcie liter świetnie wygląda w Montserrat */
+    color: rgba(255, 255, 255, 0.8) !important; /* Delikatna przezroczystość, żeby nie zlewał się z głównym nagłówkiem */
+}
+
+.login-footer-centered {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important; /* Idealny, mały odstęp między tekstem a przyciskiem */
+    width: 100% !important;
+    margin-bottom: 10px !important;
+}
+
+/* Usuwamy ukryte marginesy tekstu */
+.login-footer-centered p {
+    margin: 0 !important; 
+    padding: 0 !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 0.9em !important;
+    font-weight: 500 !important;
+}
+
+/* Wymuszamy, żeby guzik nie dodawał pustego miejsca na górze i na dole */
+.login-footer-centered .rej {
+    margin: 0 !important; 
+    scale: 1.1 !important; /* Minimalnie mniejszy scale, żeby nie uciekał z okienka */
+    text-decoration: none !important;
+}

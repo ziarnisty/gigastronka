@@ -149,7 +149,7 @@ body {
 
     padding: 40px;
     border-radius: 15px;
-    border: 2px solid #334155;
+    border: 1px solid #334155;
     text-align: center;
     text-shadow: #0f172a;
     font-family: 'naglowek';
@@ -178,8 +178,8 @@ h1 {
 
 /* BAJER: Efekt po najechaniu myszką na całą kartę */
 .bajer:hover {
-    transform: translateY(-10px) scale(1.05);
-    box-shadow: 0 0px 40px rgba(56, 189, 248, 0.2);
+    box-shadow: 0 0px 40px rgba(7, 188, 204, 0.3);
+    border-color: #07bccc5f; /* Twój błękit wpisany na sztywno */
     
 }
 
@@ -481,5 +481,67 @@ body::before {
 
 .updating {
     animation: pulse-opacity 1s infinite ease-in-out;
+}
+
+/* --- WŁASNE POWIADOMIENIA (TOAST) --- */
+.custom-alert {
+    position: fixed;
+    top: -100px; /* Ukryte poza ekranem na starcie */
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(220, 38, 38, 0.2); /* Czerwone, szklane tło */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(220, 38, 38, 0.5);
+    color: #fff;
+    padding: 15px 30px;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.4); /* Czerwony neon */
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    /* Płynna, sprężysta animacja zjeżdżania */
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
+}
+
+/* Ta klasa będzie dodawana przez JavaScript, żeby pokazać powiadomienie */
+.custom-alert.show {
+    top: 90px; /* Zjeżdża na 30px od góry ekranu */
+    opacity: 1;
+}
+
+/* Wersja na zielono dla sukcesu (np. przy wysłaniu maila) */
+.custom-alert.success {
+    background: rgba(34, 197, 94, 0.2);
+    border-color: rgba(34, 197, 94, 0.5);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+}
+
+#logout-btn {
+    scale: 1 !important;
+    margin-top: 0 !important;
+    letter-spacing: normal !important; /* Trzyma litery w ryzach */
+}
+
+/* Blokada rozsuwania liter przy najechaniu myszką */
+#logout-btn:hover {
+    letter-spacing: normal !important; 
+}
+
+/* --- TARCZA ANTY-MIGANIU (FOUC) --- */
+/* Domyślnie ukrywamy przyciski logowania, dopóki Firebase nie sprawdzi statusu */
+#nav-menu li:has(a[href="logowanie.html"]),
+#nav-menu li:has(a[href="rejestracja.html"]) {
+    display: none !important;
+}
+
+/* Kiedy skrypt upewni się, że gość NIE jest zalogowany - zdejmuje tarczę */
+#nav-menu.unlocked li:has(a[href="logowanie.html"]),
+#nav-menu.unlocked li:has(a[href="rejestracja.html"]) {
+    display: block !important;
 }
 

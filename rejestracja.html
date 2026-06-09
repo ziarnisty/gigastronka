@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
+    <link rel="stylesheet" href="logowanie.css">
+    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="kalkulator.css">
+    <title>Rejestracja</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
-    <title>Rejestracja</title>
 </head>
 <body>
 
@@ -17,6 +17,7 @@
             <li><a href="index.html">Główna</a></li>
             <li><a href="kalkulator.html">Kalkulator</a></li>
             <li><a href="inwestycja.html">Inwestycje</a></li>
+            <li><a href="bot.html">Bot</a></li>
             <li><a href="kontakt.html">Kontakt</a></li>
             <li class="push-right"><a href="logowanie.html">Logowanie</a></li>
             <li><a href="rejestracja.html" class="active">Rejestracja</a></li>
@@ -24,11 +25,31 @@
     </div>
 </nav>
 
-<div class="main-container">
 
-    
-    
+
+<div class="login-wrapper">
+    <div id="game-container" class="bajer login-box"> 
+        <h1>Rejestracja</h1>
+        <p class="podpowiedz" style="margin-bottom: 20px; margin-top: 0px;">Utwórz nowe konto, aby uzyskać dostęp</p>
+        
+        <form id="register-form">
+            <input type="email" id="email" name="email" class="custom-input" placeholder="Adres e-mail" required>
+            <input type="password" id="password" name="password" class="custom-input" placeholder="Hasło" required>
+            <input type="password" id="password_confirm" name="password_confirm" class="custom-input" placeholder="Powtórz Hasło" required>
+
+            <button type="submit" style="max-width: 192px;" class="login-btn" style="margin-top: 15px;">Zarejestruj się</button>
+        </form>
+        
+        <hr class="login-divider" style="margin-top: 25px; margin-bottom: 25px;">
+
+        <div class="login-footer-centered">
+            <p>Masz już konto?</p>
+            <a href="logowanie.html" class="rej">Zaloguj się</a>
+        </div>
+    </div>
 </div>
+    
+
 
 
     <footer class="stopka">
@@ -42,6 +63,29 @@
 
 
 
+
+
+
+
+
+
+
+<script>
+function copyToClipboard(text) {
+    const el = event.target;
+    const originalText = el.innerText; 
+
+    navigator.clipboard.writeText(text).then(() => {
+        el.innerText = "Skopiowano!"; 
+        el.style.color = "#f0abfc";  
+        
+        setTimeout(() => {
+            el.innerText = originalText; 
+            el.style.color = ""; 
+        }, 2000);
+    });
+}
+</script>
 
 
 
@@ -70,14 +114,95 @@ navbar.addEventListener('mouseleave', () => {
     // Przywracamy tylko stały gradient liniowy, gdy myszka ucieknie
     navbar.style.backgroundImage = `linear-gradient(90deg, rgba(0, 22, 72, 0.55), rgba(0, 45, 84, 0.55))`;
 });
-    </script>
+
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAoV8SUTRpcBMeFDyH86k3lkiKyDOzSfHw",
+    authDomain: "giga-stronka.firebaseapp.com",
+    projectId: "giga-stronka",
+    storageBucket: "giga-stronka.firebasestorage.app",
+    messagingSenderId: "53278121002",
+    appId: "1:53278121002:web:ee445fd3c60a9b97f03753",
+    measurementId: "G-6ZDX603H8L"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // --- NASZA NOWA FUNKCJA POWIADOMIEŃ ---
+  function showNotification(message, isSuccess = false) {
+      const alertBox = document.getElementById('custom-alert');
+      alertBox.innerText = message;
+      
+      // Jeśli sukces, dodaj zieloną klasę, w przeciwnym razie usuń ją (czerwona)
+      if(isSuccess) {
+          alertBox.classList.add('success');
+      } else {
+          alertBox.classList.remove('success');
+      }
+
+      // Pokaż powiadomienie
+      alertBox.classList.add('show');
+
+      // Schowaj automatycznie po 3.5 sekundy
+      setTimeout(() => {
+          alertBox.classList.remove('show');
+      }, 4500);
+  }
+  // ----------------------------------------
+
+  document.getElementById('register-form').addEventListener('submit', (e) => {
+      e.preventDefault(); 
+
+      const email = document.getElementById('email').value;
+      const pass1 = document.getElementById('password').value;
+      const pass2 = document.getElementById('password_confirm').value;
+
+      // ZAMIAST ALERT() UŻYWAMY NASZEJ FUNKCJI!
+      if (pass1 !== pass2) {
+          showNotification("Hasła nie są identyczne! Spróbuj ponownie.");
+          return;
+      }
+
+      if (pass1.length < 6) {
+          showNotification("Hasło musi mieć co najmniej 6 znaków!");
+          return;
+      }
+
+      createUserWithEmailAndPassword(auth, email, pass1)
+          .then((userCredential) => {
+              sendEmailVerification(userCredential.user)
+                .then(() => {
+                    // Wywołujemy powiadomienie na zielono (isSuccess = true)
+                    showNotification("Sukces! Sprawdź maila (i SPAM), aby aktywować konto.", true);
+                    
+                    // Czekamy 3 sekundy, żeby użytkownik przeczytał, i dopiero zmieniamy stronę
+                    setTimeout(() => {
+                        window.location.href = "logowanie.html"; 
+                    }, 4500);
+                });
+          })
+          .catch((error) => {
+              if (error.code === 'auth/email-already-in-use') {
+                  showNotification("Ten e-mail jest już zarejestrowany!");
+              } else if (error.code === 'auth/invalid-email') {
+                  showNotification("Podano nieprawidłowy format adresu e-mail.");
+              } else {
+                  showNotification("Wystąpił błąd: " + error.message);
+              }
+          });
+  });
+</script>
+
+<div id="custom-alert" class="custom-alert">Tu pojawi się błąd</div>
 
 
-
-
-
-
-
+<script type="module" src="auth-global.js"></script>
 </body>
 </html>
 

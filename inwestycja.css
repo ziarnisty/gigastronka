@@ -1,0 +1,167 @@
+/* Nadpisanie ustawień głównego kontenera */
+.invest-container {
+    position: fixed;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    z-index: 2000;
+}
+
+/* Panel trzymający 4 przyciski - ZMODYFIKOWANY POD STYL NAVBARU */
+.investment-menu {
+    display: flex;
+ 
+    gap: 30px; 
+    scale: 80%;
+    /* Efekt szkła oraz kolory identyczne jak w navbar-glow */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: linear-gradient(90deg, 
+    rgba(0, 22, 72, 0.55), 
+    rgba(0, 45, 84, 0.55)
+    );
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    padding: 15px 15px;
+    box-shadow: 0 0px 30px rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+}
+
+/* EFEKT GLOW PRZY NAJECHANIU IDENTYCZNY JAK W NAVBARZE */
+.investment-menu:hover {
+    border-color: #07bccc5f; 
+    box-shadow: 0 0 20px rgba(7, 188, 204, 0.3), 0 0px 30px rgba(0,0,0,0.5);
+}
+
+/* PRZYCISKI (Wzór z kalkulatora + czcionka Montserrat) */
+.invest-btn {
+    all: unset; /* Ignoruje globalne style dla buttona z style.css */
+    box-sizing: border-box;
+    letter-spacing: normal !important;
+    
+    /* ZAKAZ ZAWIJANIA TEKSTU DO NOWEJ LINII */
+    white-space: nowrap; 
+    
+    /* Wygląd domyślny - jak nieaktywny przycisk w kalkulatorze */
+    background: rgba(255, 255, 255, 0.03); 
+    border: 1px solid #334155; 
+    padding: 14px 40px; 
+    border-radius: 12px;
+    color: rgb(255, 255, 255); 
+    
+    font-family: 'Montserrat', sans-serif; 
+    font-size: 1rem;
+    font-weight: 700; 
+    cursor: pointer;
+    
+    /* Płynny powrót przycisku do pierwotnego stanu po puszczeniu kliknięcia */
+    transition: all 0.15s ease-in-out; 
+    box-shadow: 0 0 20px rgba(56, 191, 248, 0); 
+    text-align: center;
+}
+
+/* EFEKT PO NAJECHANIU MYSZKĄ (Różowy kolor) */
+.invest-btn:hover {
+    background: #e75eff; 
+    color: #0f172a; 
+    border-color: #e75eff;
+    box-shadow: 0 0px 25px rgba(204, 7, 201, 0.756); 
+}
+
+/* EFEKT PO KLIKNIĘCIU (Jasnoniebieski - stan zaznaczenia/focusu) */
+.invest-btn:focus,
+.invest-btn.active {
+    background: #38bdf8; 
+    color: #0f172a; 
+    border-color: #38bdf8;
+    box-shadow: 0 0 20px rgba(56, 191, 248, 0.745); 
+}
+
+/* KLIKNIĘCIE - PŁYNNE I SZYBKIE OPADNIĘCIE W OSI Y + LEKKIE POMNIEJSZENIE */
+.invest-btn:active {
+    background: #38bdf8 !important; 
+    color: #0f172a !important; 
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 20px rgba(56, 191, 248, 0.745) !important; 
+    
+    /* Nowa transformacja: przesunięcie o 4px w dół i subtelne zmniejszenie */
+    transform: translateY(4px) scale(0.96); 
+    /* Krótki, płynny czas animacji wejścia w klik */
+    transition: transform 0.08s ease-out; 
+}
+
+
+.tekstglowny {
+    position: fixed;
+    top: 50px;
+    left: 17%;
+    transform: translateX(-50%);
+    z-index: 2000;
+
+    color: azure;
+    font-size: 70px;
+    letter-spacing: 14px;
+    transform: scaleX(1.2);
+    font-weight: bold;
+    font-family: 'naglowek';
+}
+
+.tekstpomoc {
+    position: fixed;
+    top: 184px;
+    left: 42%;
+    /* Z-INDEX MNIEJSZY NIŻ W TEKŚCIE GŁÓWNYM (2000) -> chowa się pod nim */
+    z-index: 1999; 
+    
+
+    transform: scaleX(10.2);
+    color: azure;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: lighter;
+    font-size: 23px;
+    letter-spacing: 2px;
+    
+    /* Ukrywamy go na start, żeby nie "mignął" przed animacją */
+    opacity: 0;
+    
+    /* WYWOŁANIE ANIMACJI: 
+       0.8s - czas trwania
+       cubic-bezier - bardzo gładkie, naturalne tempo zwalniania
+       forwards - zatrzymuje tekst w końcowej fazie animacji
+    */
+    animation: revealFromUnder 1.0s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    
+    /* Mały bonus: opóźnienie 0.2s sprawia, że najpierw pojawia się strona, 
+       a chwilę po niej wyjeżdża elegancko tekst pomocniczy */
+    animation-delay: 0.4s; 
+    
+}
+
+/* KLATKI KLUCZOWE ANIMACJI */
+@keyframes revealFromUnder {
+    0% {
+        opacity: 0;
+        /* Startuje 40px wyżej (schowany pod głównym tekstem) */
+        transform: translateX(-50%) translateY(-40px); 
+    }
+    100% {
+        opacity: 1;
+        /* Ląduje na swojej naturalnej, docelowej pozycji */
+        transform: translateX(-50%) translateY(0)  scaleX(1.03); 
+    }
+}
+
+.green-letter {
+    background: linear-gradient(135deg, #39ff14 0%, #059b2e 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-stroke: 0px; 
+    
+    /* === ROZWIĄZANIE Z PRZYCINANIEM === */
+    display: inline-block; /* Pozwala na prawidłowe przeliczanie wymiarów */
+    padding: 10px 0px;     /* Dodaje 10px tła na górze i dole, żeby objąć całą literę */
+    margin: -10px 0px;
+}

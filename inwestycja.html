@@ -17,6 +17,7 @@
             <li><a href="index.html">Główna</a></li>
             <li><a href="kalkulator.html">Kalkulator</a></li>
             <li><a href="inwestycja.html" class="active">Inwestycje</a></li>
+            <li><a href="bot.html">Bot</a></li>
             <li><a href="kontakt.html">Kontakt</a></li>
             <li class="push-right"><a href="logowanie.html">Logowanie</a></li>
             <li><a href="rejestracja.html">Rejestracja</a></li>
@@ -24,11 +25,26 @@
     </div>
 </nav>
 
-<div class="main-container">
+<div class="invest-container">
+    
+    <div class="investment-menu">
+        <button class="invest-btn active">Wszystko</button>
+        <button class="invest-btn">CS2 Skiny</button>
+        <button class="invest-btn">Giełda XTB</button>
+        <button class="invest-btn">Obligacje</button>
+    </div>
 
+    <h5 class="tekstglowny">W<span class="green-letter">$</span>ZYSTKO</h5>
+
+    <h6 class="tekstpomoc">Zawiera wszystkie aktualne <span class="green-letter">inwestycje</span>.</h6>
     
-    
+
 </div>
+
+
+
+
+
 
 
     <footer class="stopka">
@@ -49,6 +65,13 @@
 
 
 
+<footer class="stopka">
+    <p>&copy; 2026 Karol Moskalewicz</p>
+    <div class="sociale">
+    <a href="javascript:void(0)" onclick="copyToClipboard('moskalewiczkarol@gmail.com')">moskalewiczkarol@gmail.com</a>
+</div>
+</footer>
+
 <script>
 const navbar = document.querySelector('.navbar-glow');
 
@@ -57,9 +80,6 @@ navbar.addEventListener('mousemove', (e) => {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    // Łączymy dwa gradienty: 
-    // 1. Ruchome światełko (radial-gradient)
-    // 2. Stałe tło liniowe (linear-gradient)
     navbar.style.backgroundImage = `
         radial-gradient(circle at ${x}px ${y}px, rgba(255, 255, 255, 0.05), transparent 120px),
         linear-gradient(90deg, rgba(0, 22, 72, 0.55), rgba(0, 45, 84, 0.55))
@@ -67,20 +87,33 @@ navbar.addEventListener('mousemove', (e) => {
 });
 
 navbar.addEventListener('mouseleave', () => {
-    // Przywracamy tylko stały gradient liniowy, gdy myszka ucieknie
     navbar.style.backgroundImage = `linear-gradient(90deg, rgba(0, 22, 72, 0.55), rgba(0, 45, 84, 0.55))`;
 });
-    </script>
+
+// ROZWIĄZANIE: Efekt ruchomego podświetlenia dla szklanego boxu menu
+const investMenu = document.querySelector('.investment-menu');
+
+investMenu.addEventListener('mousemove', (e) => {
+    const rect = investMenu.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    investMenu.style.backgroundImage = `
+        radial-gradient(circle at ${x}px ${y}px, rgba(255, 255, 255, 0.05), transparent 120px),
+        linear-gradient(90deg, rgba(0, 22, 72, 0.55), rgba(0, 45, 84, 0.55))
+    `;
+});
+
+investMenu.addEventListener('mouseleave', () => {
+    investMenu.style.backgroundImage = `linear-gradient(90deg, rgba(0, 22, 72, 0.55), rgba(0, 45, 84, 0.55))`;
+});
+</script>
 
 
 
 
 
 
-
+<script type="module" src="auth-global.js"></script>
 </body>
 </html>
-
-
-
-
